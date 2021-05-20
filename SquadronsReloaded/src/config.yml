@@ -1,0 +1,7 @@
+carriedTypes:
+  - Airskiff
+carrierTypes:
+  - Airship
+  - elevator
+pilotCheckTicks: 40
+manoverboardTime: 30000
