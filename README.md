@@ -1,26 +1,26 @@
 # SquadronsReloaded
-Movecraft addon which reimplements SquadronDirectors
-
-Commands:
-/squadron
- manoverboard - tps you to lead squadron craft
- cruise [On,Off,North,East,South,West] - toggles squadron cruise
- release [player] - releases own squadron or other player's squadron
- scuttle [player] - scuttles own squadron or other player's squadron
- formation
- info [player] - displays own squadron info or other player's squadron info
- list - lists all squadrons on the server
-
-Squadron:
- Form a squadron by left clicking craft signs (like Airskiff signs) while piloting a carrier type.
- The carried types must be part of the carrier to be added to the squadron.
- When any translation or rotation (including indirect and direct control cruising) is performed on a squadron craft
-all crafts of the squadron will try to mimic it.
- The squadron pilot has to control the squadron from one of the crafts using the manoverboard command or sign.
- The pilot will not get released from the carrier while they are on board any squadron's craft.
-
-Signs on crafts:
- These work
+Movecraft addon which reimplements SquadronDirectors  
+  
+##Commands:  
+/squadron  
+ manoverboard - tps you to lead squadron craft  
+ cruise [On,Off,North,East,South,West] - toggles squadron cruise  
+ release [player] - releases own squadron or other player's squadron  
+ scuttle [player] - scuttles own squadron or other player's squadron  
+ formation  
+ info [player] - displays own squadron info or other player's squadron info  
+ list - lists all squadrons on the server  
+  
+##Squadron:  
+ Form a squadron by left clicking craft signs (like Airskiff signs) while piloting a carrier type.  
+ The carried types must be part of the carrier to be added to the squadron.  
+ When any translation or rotation (including indirect and direct control cruising) is performed on a squadron craft  
+all crafts of the squadron will try to mimic it.  
+ The squadron pilot has to control the squadron from one of the crafts using the manoverboard command or sign.  
+ The pilot will not get released from the carrier while they are on board any squadron's craft.  
+  
+##Signs on crafts:  
+ These work  
   AscendSign
   ContactsSign
   CraftSign
