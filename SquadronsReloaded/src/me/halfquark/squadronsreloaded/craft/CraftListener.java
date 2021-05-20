@@ -1,6 +1,5 @@
 package me.halfquark.squadronsreloaded.craft;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -38,11 +37,9 @@ public class CraftListener implements Listener {
 			return;
 		Squadron sq = SquadronManager.getInstance().getSquadron(p);
 		if(sq.hasCraft(e.getCraft())) {
-			Bukkit.broadcastMessage("Squad craft sunk");
 			sq.removeCraft(e.getCraft());
 			return;
 		}
-		Bukkit.broadcastMessage("Carrier sunk");
 		sq.sinkAll();
 		SquadronManager.getInstance().removeSquadron(p);
 	}
