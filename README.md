@@ -75,3 +75,10 @@ all crafts of the squadron will try to mimic it.
  carrierTypes - list all crafts which can be used to launch squadrons  
  pilotCheckTicks - specify how many ticks the plugin will wait after a squad craft is piloted to check if it's valid and add it to the squadron (you can leave it at 40)  
  manoverboardTime - specify the manoverboard timer when you fall from a squadron craft  
+ squadMaxSize - (double) specify the base maximum number of crafts allowed on a squadron  
+ squadMaxSizeCarrierMultiplier - (double) specify the carrier displacement multiplier  
+   Final squadron max number of crafts = squadMaxSize + squadMaxSizeCarrierMultiplier * carrier displacement when piloted  
+ squadMaxDisplacement - (double) specify the base maximum displacement allowed on a squadron  
+ squadMaxDisplacementCarrierMultiplier: - (double) specify the carrier displacement multiplier  
+   Final squadron max displacement = squadMaxDisplacement + squadMaxDisplacementCarrierMultiplier * carrier displacement when piloted  
+
