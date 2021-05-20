@@ -2,6 +2,9 @@
 Movecraft addon which reimplements SquadronDirectors.  
 Code from Movecraft https://github.com/APDevTeam/Movecraft and SquadronDirector https://github.com/Baccayarro/SquadronDirector was used.
   
+## TODO:  
+FORMATIONS  
+  
 ## Commands:  
 /squadron  
  manoverboard - tps you to lead squadron craft  
