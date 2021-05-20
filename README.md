@@ -1,6 +1,6 @@
 # SquadronsReloaded
 Movecraft addon which reimplements SquadronDirectors.  
-Code from Movecraft https://github.com/APDevTeam/Movecraft and SquadronDirector https://github.com/Baccayarro/SquadronDirector was used.
+Code from Movecraft https://github.com/APDevTeam/Movecraft was used.
   
 ## TODO:  
 FORMATIONS  
