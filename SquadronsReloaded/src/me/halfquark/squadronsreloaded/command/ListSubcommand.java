@@ -21,6 +21,11 @@ public class ListSubcommand {
 			stats += sq.getPilot().getName() + " ";
 			stats += sq.getSize() + " (";
 			stats += sq.getDisplacement() + ") @ ";
+			if(sq.getLeadCraft() == null) {
+				stats += "null";
+				sender.sendMessage(stats);
+				continue;
+			}
 			MovecraftLocation leadLoc = sq.getLeadCraft().getHitBox().getMidPoint();
 			stats += leadLoc.getX() + "," + leadLoc.getY() + "," + leadLoc.getZ();
 			sender.sendMessage(stats);

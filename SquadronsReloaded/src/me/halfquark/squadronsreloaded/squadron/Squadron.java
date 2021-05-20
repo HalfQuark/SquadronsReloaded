@@ -71,6 +71,8 @@ public class Squadron {
 	}
 	
 	public boolean removeCraft(Craft c) {
+		if(crafts == null)
+			return false;
 		return (crafts.remove(c) != null);
 	}
 	

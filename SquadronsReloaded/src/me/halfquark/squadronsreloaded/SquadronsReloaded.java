@@ -5,7 +5,7 @@ import java.util.List;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.halfquark.squadronsreloaded.command.SquadronCommand;
-import me.halfquark.squadronsreloaded.craft.CraftListener;
+import me.halfquark.squadronsreloaded.listener.CraftListener;
 import me.halfquark.squadronsreloaded.listener.RedstoneComponentListener;
 import me.halfquark.squadronsreloaded.listener.SRInteractListener;
 import me.halfquark.squadronsreloaded.listener.SRPlayerListener;
@@ -28,6 +28,10 @@ public class SquadronsReloaded extends JavaPlugin {
 	public static List<String> CARRIEDTYPES;
 	public static int PILOTCHECKTICKS;
 	public static int MANOVERBOARDTIME;
+	public static double SQUADMAXSIZE;
+	public static double SQUADMAXSIZECARRIERMULT;
+	public static double SQUADMAXDISP;
+	public static double SQUADMAXDISPCARRIERMULT;
 	
 	@Override
 	public void onEnable() {
@@ -37,6 +41,10 @@ public class SquadronsReloaded extends JavaPlugin {
 		CARRIEDTYPES = getConfig().getStringList("carriedTypes");
 		PILOTCHECKTICKS = getConfig().getInt("pilotCheckTicks");
 		MANOVERBOARDTIME = getConfig().getInt("manoverboardTime");
+		SQUADMAXSIZE = getConfig().getDouble("squadMaxSize");
+		SQUADMAXSIZECARRIERMULT = getConfig().getDouble("squadMaxSizeCarrierMultiplier");
+		SQUADMAXDISP = getConfig().getDouble("squadMaxDisplacement");
+		SQUADMAXDISPCARRIERMULT = getConfig().getDouble("squadMaxDisplacementCarrierMultiplier");
 		SquadronManager.initialize();
 		getServer().getPluginManager().registerEvents(new SRSignClickListener(), this);
 		getServer().getPluginManager().registerEvents(new SRInteractListener(), this);

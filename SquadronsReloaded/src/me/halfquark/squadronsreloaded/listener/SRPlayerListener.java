@@ -31,7 +31,7 @@ public class SRPlayerListener implements Listener {
 		}
 	    Craft onBoardCraft = null;
 	    for(Craft craft : sq.getCrafts()) {
-	    	if (MathUtils.locationNearHitBox(craft.getHitBox(),event.getPlayer().getLocation(),2)) {
+	    	if (MathUtils.locationNearHitBox(craft.getHitBox(), event.getPlayer().getLocation(),2)) {
 	    		onBoardCraft = craft;
 		        break;
 		    }

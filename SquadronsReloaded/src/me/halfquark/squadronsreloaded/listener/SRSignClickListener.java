@@ -135,6 +135,17 @@ public class SRSignClickListener implements Listener {
                 	CraftManager.getInstance().removeCraft(c, Reason.EMPTY);
                 	return;
                 }
+                if(squadron.getSize() + 1 > SquadronsReloaded.SQUADMAXSIZE + SquadronsReloaded.SQUADMAXSIZECARRIERMULT * squadron.getCarrier().getOrigBlockCount()) {
+                	event.getPlayer().sendMessage(I18nSupport.getInternationalisedString("Squadrons - Too many crafts"));
+                	CraftManager.getInstance().removeCraft(c, Reason.EMPTY);
+                	return;
+                }
+                if(squadron.getDisplacement() + c.getOrigBlockCount() > SquadronsReloaded.SQUADMAXDISP + SquadronsReloaded.SQUADMAXDISPCARRIERMULT * squadron.getCarrier().getOrigBlockCount()) {
+                	event.getPlayer().sendMessage(I18nSupport.getInternationalisedString("Squadrons - Too much displacement"));
+                	CraftManager.getInstance().removeCraft(c, Reason.EMPTY);
+                	return;
+                }
+                 
                 c.setPilotLocked(carrier.getPilotLocked());
             	event.getPlayer().sendMessage(I18nSupport.getInternationalisedString(c.getType().getCraftName() + "(" + c.getHitBox().size() + ") added to squadron in position") + " " + squadron.putCraft(c));
             }
