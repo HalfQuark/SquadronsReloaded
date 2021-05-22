@@ -15,7 +15,6 @@ public class FormationManager {
 	private static ArrayList<Formation> formations;
 	
 	public static void initialize() {
-		Bukkit.broadcastMessage("Test1");
 		inst = new FormationManager();
 	}
 	
