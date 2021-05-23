@@ -50,7 +50,10 @@ all crafts of the squadron will try to mimic it.
   - When a lever on a red wool is flicked all levers on red wool are flicked to the same state.  
   - When a repeater on top of a white wool is adjusted all repeaters on white wool are adjusted to the same ticks.  
   - When a comparator on top of a double stone slab is toggled all comparators on double stone slab are toggled to the same subtraction mode state.  
-
+  
+## Synced signs:  
+ When right-clicking a synced sign on a squadron craft, all signs of the same type (for example: LaunchTorpedo) sharing any line(string) with the clicked sign will be also activated.  
+ The first line of the clicked sign won't be considered, so if for example we want to fire all torpedoes either include the same name in all LaunchTorpedo signs or include another line which also says LaunchTorpedo on the clicked sign.  
 ## Formations:  
  When forming up a formation name and spacing must be specified.  
  Crafts will then try to form up when the squadron is stick-moved to prevent weird behaviour while cruising.  
@@ -122,4 +125,5 @@ all crafts of the squadron will try to mimic it.
    Final squadron max displacement = squadMaxDisplacement + squadMaxDisplacementCarrierMultiplier * carrier displacement when piloted  
  turnTicks - specify how many ticks the plugin will wait to try to correct a craft's orientation after it moves  
  formationRoundDistance - specify min distance from formation position at which crafts won't attempt to form up anymore  
+ syncedSigns - list of types of sign which will be syncronised across squadron crafts  
 
