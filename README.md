@@ -17,9 +17,9 @@ Code from Movecraft https://github.com/APDevTeam/Movecraft was used.
  The carried types must be part of the carrier to be added to the squadron.  
  When any translation or rotation (including indirect and direct control cruising) is performed on a squadron craft  
 all crafts of the squadron will try to mimic it.  
- Each craft is attributed a rank id when added to the squadron, starting at 1 and increasing.  
+ Each craft is attributed an id when added to the squadron, starting at 0 (Changed from 1 to 0 due to formation expressions) and increasing.  
  The squadron pilot has to control the squadron from one of the crafts using the manoverboard command or sign.  
- The manoverboard/sign will take the pilot to the lead craft which is the craft with the minimum rank id in the squadron at that point.  
+ The manoverboard/sign will take the pilot to the lead craft which is the craft with the minimum id in the squadron at that point.  
  The pilot will not get released from the carrier while they are on board any squadron's craft.  
   
 ## Signs on crafts:  
@@ -78,7 +78,7 @@ all crafts of the squadron will try to mimic it.
  Expressions are used to determine each craft's relative position to the lead craft. 
  They can use the opperators: + - * / and ^  
  They can use 2 variables:  
-    n : difference between the craft's rank id in the squadron and the lead craft's rank id (integer)  
+    n : craft's rank, ammount of crafts in the squadron with id smaller than the craft's id (integer)  
     s : spacing specified on the formation command/sign  
  The relative position of a craft is then calculated by the x, y and z expressions of the cardinal direction of the squadron's movement.  
  If no direction of movement was detected, it will default to NORTH.  
