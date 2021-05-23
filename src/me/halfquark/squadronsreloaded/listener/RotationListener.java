@@ -17,9 +17,9 @@ public class RotationListener implements Listener {
 		CraftRotateManager.getInstance().registerRotation(e.getCraft(), e.getRotation());
 		Player p = e.getCraft().getNotificationPlayer();
 		Craft craft = e.getCraft();
-		if(!SquadronManager.getInstance().hasSquadron(p))
+		Squadron sq = SquadronManager.getInstance().getSquadron(p, true);
+		if(sq == null)
 			return;
-		Squadron sq = SquadronManager.getInstance().getSquadron(p);
 		if(!sq.hasCraft(e.getCraft()))
 			return;
 		if(craft.equals(sq.getLeadCraft()))

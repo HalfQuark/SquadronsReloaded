@@ -42,7 +42,7 @@ public class SRSignLeftClickListener implements Listener {
         }
         Sign sign = (Sign) event.getClickedBlock().getState();
         if(sign.getLine(0).equalsIgnoreCase("Formation")) {
-        	Squadron sq = SquadronManager.getInstance().getSquadron(event.getPlayer());
+        	Squadron sq = SquadronManager.getInstance().getSquadron(event.getPlayer(), true);
             if(sq == null) {
             	event.getPlayer().sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Squadrons - No Squadron Found"));
                 return;
@@ -73,13 +73,13 @@ public class SRSignLeftClickListener implements Listener {
         }
         Player p = event.getPlayer();
         final boolean newSquadron;
-        if(!SquadronManager.getInstance().hasSquadron(p)) {
+        if(SquadronManager.getInstance().getSquadron(p, false) == null) {
         	SquadronManager.getInstance().putSquadron(p, new Squadron(p));
         	newSquadron = true;
         } else {
         	newSquadron = false;
         }
-        Squadron squadron = SquadronManager.getInstance().getSquadron(p);
+        Squadron squadron = SquadronManager.getInstance().getSquadron(p, false);
         // Attempt to run detection
         Location loc = event.getClickedBlock().getLocation();
         MovecraftLocation startPoint = new MovecraftLocation(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
@@ -164,12 +164,10 @@ public class SRSignLeftClickListener implements Listener {
                 	CraftManager.getInstance().removeCraft(c, Reason.EMPTY);
                 	return;
                 }
-                if(newSquadron) {
-                	if(isHorizontal(squadron.getCarrier().getCruiseDirection())) {
-                		squadron.setDirection(squadron.getCarrier().getCruiseDirection());
-                	}
-                }
                 CruiseDirection cd = CraftDirectionDetection.detect(c);
+                if(newSquadron) {
+                	squadron.setDirection(cd);
+                }
                 if(cd == null) {
                 	event.getPlayer().sendMessage(I18nSupport.getInternationalisedString("Squadrons - Contradicting Cruise signs"));
                 	CraftManager.getInstance().removeCraft(c, Reason.EMPTY);
@@ -182,13 +180,6 @@ public class SRSignLeftClickListener implements Listener {
             	event.getPlayer().sendMessage(I18nSupport.getInternationalisedString(c.getType().getCraftName() + "(" + c.getHitBox().size() + ") added to squadron in position") + " " + position);
             }
         }.runTaskLater(SquadronsReloaded.getInstance(), SquadronsReloaded.PILOTCHECKTICKS);
-	}
-	
-	private boolean isHorizontal(CruiseDirection cd) {
-		return CruiseDirection.NORTH.equals(cd) ||
-				CruiseDirection.EAST.equals(cd) ||
-				CruiseDirection.SOUTH.equals(cd) ||
-				CruiseDirection.WEST.equals(cd);
 	}
 	
 }

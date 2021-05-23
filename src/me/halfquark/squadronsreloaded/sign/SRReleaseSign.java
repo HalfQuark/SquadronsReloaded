@@ -33,7 +33,7 @@ public class SRReleaseSign implements Listener {
         if(!line.equalsIgnoreCase("SquadronRelease"))
         	return;
         
-        Squadron sq = SquadronManager.getInstance().getSquadron(event.getPlayer());
+        Squadron sq = SquadronManager.getInstance().getSquadron(event.getPlayer(), true);
         if(sq == null) {
         	player.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Squadrons - No Squadron Found"));
             return;

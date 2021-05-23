@@ -14,7 +14,6 @@ import me.halfquark.squadronsreloaded.formation.Formation;
 import me.halfquark.squadronsreloaded.formation.FormationManager;
 import me.halfquark.squadronsreloaded.squadron.Squadron;
 import me.halfquark.squadronsreloaded.squadron.SquadronManager;
-import net.countercraft.movecraft.craft.Craft;
 import net.countercraft.movecraft.localisation.I18nSupport;
 import net.countercraft.movecraft.utils.ChatUtils;
 
@@ -35,17 +34,11 @@ public class SRFormationSign implements Listener {
         if(!line.equalsIgnoreCase("Formation"))
         	return;
         
-        Squadron sq = SquadronManager.getInstance().getSquadron(event.getPlayer());
+        Squadron sq = SquadronManager.getInstance().getSquadron(event.getPlayer(), true);
         if(sq == null) {
         	player.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Squadrons - No Squadron Found"));
             return;
         }
-		Craft leadCraft = sq.getLeadCraft();
-		if(leadCraft == null) {
-			player.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Squadrons - No Squadron Found"));
-            return;
-		}
-		
 		Formation formation = FormationManager.getInstance().getFormation(ChatColor.stripColor(sign.getLine(1)));
 		if(formation == null) {
 			player.sendMessage(ChatUtils.ERROR_PREFIX + I18nSupport.getInternationalisedString("Squadrons - Specify a valid formation"));

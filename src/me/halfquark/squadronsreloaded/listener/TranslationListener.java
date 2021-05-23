@@ -11,6 +11,7 @@ import me.halfquark.squadronsreloaded.move.CraftRotateManager;
 import me.halfquark.squadronsreloaded.move.CraftTranslateManager;
 import me.halfquark.squadronsreloaded.squadron.Squadron;
 import me.halfquark.squadronsreloaded.squadron.SquadronManager;
+import net.countercraft.movecraft.CruiseDirection;
 import net.countercraft.movecraft.MovecraftLocation;
 import net.countercraft.movecraft.craft.Craft;
 import net.countercraft.movecraft.events.CraftTranslateEvent;
@@ -23,9 +24,9 @@ public class TranslationListener implements Listener {
 			CraftRotateManager.getInstance().registerCruise(e.getCraft(), e.getCraft().getCruiseDirection());
 		Player p = e.getCraft().getNotificationPlayer();
 		Craft craft = e.getCraft();
-		if(!SquadronManager.getInstance().hasSquadron(p))
+		Squadron sq = SquadronManager.getInstance().getSquadron(p, true);
+		if(sq == null)
 			return;
-		Squadron sq = SquadronManager.getInstance().getSquadron(p);
 		if(!sq.hasCraft(e.getCraft()))
 			return;
 		if(craft.equals(sq.getLeadCraft())) {
@@ -39,12 +40,15 @@ public class TranslationListener implements Listener {
 		if(!sq.isFormingUp())
 			return;
 		Formation formation = sq.getFormation();
+		CruiseDirection cd = sq.getDirection();
+		if(cd == null)
+			cd = CruiseDirection.NORTH;
 		Double x = (double) sq.getLeadCraft().getHitBox().getMidPoint().getX();
 		Double y = (double) sq.getLeadCraft().getHitBox().getMidPoint().getY();
 		Double z = (double) sq.getLeadCraft().getHitBox().getMidPoint().getZ();
-		x += formation.getXPosition(sq.getCraftId(e.getCraft()) - sq.getLeadId(), sq.getSpacing(), sq.getDirection());
-		y += formation.getYPosition(sq.getCraftId(e.getCraft()) - sq.getLeadId(), sq.getSpacing(), sq.getDirection());
-		z += formation.getZPosition(sq.getCraftId(e.getCraft()) - sq.getLeadId(), sq.getSpacing(), sq.getDirection());
+		x += formation.getXPosition(sq.getCraftRank(e.getCraft()) - sq.getLeadId(), sq.getSpacing(), cd);
+		y += formation.getYPosition(sq.getCraftRank(e.getCraft()) - sq.getLeadId(), sq.getSpacing(), cd);
+		z += formation.getZPosition(sq.getCraftRank(e.getCraft()) - sq.getLeadId(), sq.getSpacing(), cd);
 		Location targetLoc = new Location(e.getWorld(), x, y, z);
 		MovecraftLocation mLoc = craft.getHitBox().getMidPoint();
 		Location craftLoc = new Location(e.getWorld(), mLoc.getX(), mLoc.getY(), mLoc.getZ());

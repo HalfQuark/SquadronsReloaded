@@ -36,16 +36,12 @@ public class SRLeadSign implements Listener {
         if(!line.equalsIgnoreCase("SquadronLead"))
         	return;
         
-        Squadron sq = SquadronManager.getInstance().getSquadron(event.getPlayer());
+        Squadron sq = SquadronManager.getInstance().getSquadron(event.getPlayer(), true);
         if(sq == null) {
         	player.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Squadrons - No Squadron Found"));
             return;
         }
 		Craft leadCraft = sq.getLeadCraft();
-		if(leadCraft == null) {
-			player.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Squadrons - No Squadron Found"));
-            return;
-		}
 		Location telPoint = getCraftTeleportPoint(leadCraft);
         
         ManOverboardEvent moEvent = new ManOverboardEvent(leadCraft, telPoint);

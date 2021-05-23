@@ -15,9 +15,9 @@ public class SinkListener implements Listener {
 	@EventHandler
 	public void onCraftSink(CraftSinkEvent e) {
 		Player p = e.getCraft().getNotificationPlayer();
-		if(!SquadronManager.getInstance().hasSquadron(p))
+		Squadron sq = SquadronManager.getInstance().getSquadron(p, true);
+		if(sq == null)
 			return;
-		Squadron sq = SquadronManager.getInstance().getSquadron(p);
 		if(sq.hasCraft(e.getCraft())) {
 			sq.removeCraft(e.getCraft());
 			if(sq.getSize() == 0) {
@@ -26,8 +26,11 @@ public class SinkListener implements Listener {
 			}
 			return;
 		}
-		sq.sinkAll();
-		SquadronManager.getInstance().removeSquadron(p);
+		if(sq.getCarrier().equals(e.getCraft())) {
+			sq.sinkAll();
+			SquadronManager.getInstance().removeSquadron(p);
+			return;
+		}
 	}
 	
 }

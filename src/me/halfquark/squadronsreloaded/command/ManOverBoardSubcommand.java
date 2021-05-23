@@ -1,7 +1,5 @@
 package me.halfquark.squadronsreloaded.command;
 
-import java.util.concurrent.ConcurrentMap;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -27,23 +25,12 @@ public class ManOverBoardSubcommand {
 			player.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Insufficient Permissions"));
             return;
 		}
-		Squadron sq = SquadronManager.getInstance().getSquadron(player);
+		Squadron sq = SquadronManager.getInstance().getSquadron(player, true);
 		if(sq == null){
 			player.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Squadrons - No Squadron Found"));
             return;
 		}
-		ConcurrentMap<Craft, Integer> craftMap = sq.getCraftMap();
-		if(craftMap == null) {
-			player.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Squadrons - No Squadron Found"));
-            return;
-		}
-		if(craftMap.size() == 0) {
-			player.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Squadrons - No Squadron Found"));
-            return;
-		}
 		Craft leadCraft = sq.getLeadCraft();
-		if(leadCraft == null)
-			return;
 		Location telPoint = getCraftTeleportPoint(leadCraft);
         if (leadCraft.getW() != player.getWorld()) {
             player.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("ManOverboard - Other World"));

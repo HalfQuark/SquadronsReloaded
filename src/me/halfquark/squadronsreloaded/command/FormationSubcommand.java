@@ -23,16 +23,8 @@ public class FormationSubcommand {
 			pSender.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Insufficient Permissions"));
 			return;
 		}
-		Squadron sq = SquadronManager.getInstance().getSquadron(pSender);
+		Squadron sq = SquadronManager.getInstance().getSquadron(pSender, true);
 		if(sq == null){
-			sender.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Squadrons - No Squadron Found"));
-            return;
-		}
-		if(sq.getCarrier() == null){
-			sender.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Squadrons - No Squadron Found"));
-            return;
-		}
-		if(sq.getCrafts() == null){
 			sender.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Squadrons - No Squadron Found"));
             return;
 		}

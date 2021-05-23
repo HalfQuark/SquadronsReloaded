@@ -1,6 +1,7 @@
 package me.halfquark.squadronsreloaded.listener;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.event.EventHandler;
@@ -20,10 +21,37 @@ import net.countercraft.movecraft.utils.MathUtils;
 
 public class SRPlayerListener implements Listener {
 	
+	private Map<Craft, Long> timeToReleaseAfter;
+	
+	@SuppressWarnings("unchecked")
+	public SRPlayerListener() {
+		HandlerList handlers = PlayerMoveEvent.getHandlerList();
+		for(RegisteredListener l : handlers.getRegisteredListeners()) {
+            if (!l.getPlugin().isEnabled()) {
+                continue;
+            }
+            if(l.getListener() instanceof PlayerListener) {
+                PlayerListener pl = (PlayerListener) l.getListener();
+                Class<PlayerListener> plclass = PlayerListener.class;
+                try {
+                    Field field = plclass.getDeclaredField("timeToReleaseAfter");
+                    field.setAccessible(true);
+                    timeToReleaseAfter = (Map<Craft, Long>) field.get(pl);
+                }
+                catch(Exception exception) {
+                    exception.printStackTrace();
+                    timeToReleaseAfter = new HashMap<>();
+                }
+                return;
+            }
+		}
+		timeToReleaseAfter = new HashMap<>();
+	}
+	
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerMove(PlayerMoveEvent event) {
 		
-		Squadron sq = SquadronManager.getInstance().getSquadron(event.getPlayer());
+		Squadron sq = SquadronManager.getInstance().getSquadron(event.getPlayer(), true);
 		if(sq == null)
 			return;
 		if(sq.getCarrier() == null) {
@@ -42,28 +70,8 @@ public class SRPlayerListener implements Listener {
 		Craft playerCraft = sq.getCarrier();
 		CraftManager.getInstance().addOverboard(event.getPlayer());
         if(playerCraft != null) {
-            HandlerList handlers = event.getHandlers();
-            RegisteredListener[] listeners = handlers.getRegisteredListeners();
-            for (RegisteredListener l : listeners) {
-                if (!l.getPlugin().isEnabled()) {
-                    continue;
-                }
-                if(l.getListener() instanceof PlayerListener) {
-                    PlayerListener pl = (PlayerListener) l.getListener();
-                    Class<PlayerListener> plclass = PlayerListener.class;
-                    try {
-                        Field field = plclass.getDeclaredField("timeToReleaseAfter");
-                        field.setAccessible(true);
-                        @SuppressWarnings("unchecked")
-						final Map<Craft, Long> timeToReleaseAfter = (Map<Craft, Long>) field.get(pl);
-                        if(timeToReleaseAfter.containsKey(playerCraft)) {
-                            timeToReleaseAfter.put(playerCraft, System.currentTimeMillis() + SquadronsReloaded.MANOVERBOARDTIME);
-                        }
-                    }
-                    catch(Exception exception) {
-                        exception.printStackTrace();
-                    }
-                }
+        	if(timeToReleaseAfter.containsKey(playerCraft)) {
+                timeToReleaseAfter.put(playerCraft, System.currentTimeMillis() + SquadronsReloaded.MANOVERBOARDTIME);
             }
         }
 	}

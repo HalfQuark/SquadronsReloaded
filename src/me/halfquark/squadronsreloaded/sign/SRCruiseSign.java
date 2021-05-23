@@ -6,18 +6,22 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import me.halfquark.squadronsreloaded.SquadronsReloaded;
 import me.halfquark.squadronsreloaded.squadron.Squadron;
 import me.halfquark.squadronsreloaded.squadron.SquadronManager;
 import net.countercraft.movecraft.CruiseDirection;
 import net.countercraft.movecraft.craft.Craft;
+import net.countercraft.movecraft.utils.MathUtils;
 
 public class SRCruiseSign implements Listener {
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOWEST)
     public final void onSignClick(PlayerInteractEvent event) {
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) {
             return;
@@ -33,13 +37,21 @@ public class SRCruiseSign implements Listener {
         	return;
         boolean setCruise = line.equalsIgnoreCase("Cruise: OFF");
         String setLine = (setCruise)?("Cruise: ON"):("Cruise: OFF");
-        Squadron sq = SquadronManager.getInstance().getSquadron(player);
+        Squadron sq = SquadronManager.getInstance().getSquadron(player, true);
 		if(sq == null)
 			return;
-		if(sq.getCrafts() == null)
-			return;
-		if(sq.getCrafts().size() == 0)
-			return;
+		boolean onBoardCraft = false;
+	    for(Craft craft : sq.getCrafts()) {
+	    	if (MathUtils.locationNearHitBox(craft.getHitBox(),event.getPlayer().getLocation(),2)) {
+	    		onBoardCraft = true;
+		        break;
+		    }
+	    }
+	    if(!onBoardCraft)
+	    	return;
+	    sign.setLine(0, "");
+	    sign.update(true);
+	    sign.setLine(0, setLine);
 		CruiseDirection cd = null;
 		if(setCruise) {
 			org.bukkit.material.Sign materialSign = (org.bukkit.material.Sign) block.getState().getData();
@@ -55,12 +67,15 @@ public class SRCruiseSign implements Listener {
 				c.setCruiseDirection(cd);
 				c.setLastCruiseUpdate(System.currentTimeMillis());
 			}
-            sign.setLine(0, setLine);
-            sign.update(true);
             c.setCruising(setCruise);
             c.resetSigns(sign);
 		}
-		
+		new BukkitRunnable() {
+            @Override
+            public void run() {
+                sign.update(true);
+            }
+        }.runTaskLater(SquadronsReloaded.getInstance(), 1);
     }
 	
 }

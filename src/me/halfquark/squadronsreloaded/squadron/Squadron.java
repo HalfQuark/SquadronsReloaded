@@ -29,9 +29,10 @@ public class Squadron {
 	public Squadron(Player p) {
 		pilot = p;
 		crafts = new ConcurrentHashMap<>();
-		nextId = 1;
+		nextId = 0;
 		formation = null;
 		spacing = null;
+		cruiseDirection = null;
 	}
 	
 	public Player getPilot() {return pilot;}
@@ -40,11 +41,8 @@ public class Squadron {
 	public Formation getFormation() {return formation;}
 	public Integer getSpacing() {return spacing;}
 	public boolean isFormingUp() {return formation != null;}
-	public CruiseDirection getDirection() {
-		if(cruiseDirection == null)
-			return CruiseDirection.NORTH;
-		return cruiseDirection;
-	}
+	@Nullable
+	public CruiseDirection getDirection() {return cruiseDirection;}
 	
 	public int getSize() {return (crafts == null)?(0):(crafts.size());}
 	public int getDisplacement() {
@@ -105,6 +103,21 @@ public class Squadron {
 		if(!crafts.containsKey(craft))
 			return null;
 		return crafts.get(craft);
+	}
+	
+	@Nullable
+	public Integer getCraftRank(Craft craft) {
+		if(crafts == null)
+			return null;
+		if(!crafts.containsKey(craft))
+			return null;
+		int id = crafts.get(craft);
+		int rank = 0;
+		for(Entry<Craft, Integer> entry : crafts.entrySet()) {
+			if(entry.getValue() < id)
+				rank++;
+		}
+		return rank;
 	}
 	
 	public int putCraft(Craft c) {

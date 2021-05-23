@@ -23,16 +23,8 @@ public class CruiseSubcommand {
             return;
 		}
 		
-		Squadron sq = SquadronManager.getInstance().getSquadron(player);
+		Squadron sq = SquadronManager.getInstance().getSquadron(player, true);
 		if(sq == null) {
-			sender.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Squadrons - No Squadron Found"));
-            return;
-		}
-		if(sq.getCrafts() == null) {
-			sender.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Squadrons - No Squadron Found"));
-            return;
-		}
-		if(sq.getCrafts().size() == 0) {
 			sender.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Squadrons - No Squadron Found"));
             return;
 		}
@@ -78,7 +70,7 @@ public class CruiseSubcommand {
 	        }
 	        return;
 	    }
-	    if (!player.hasPermission("movecraft.commands") || !player.hasPermission("movecraft.squadron.cruise")) {
+	    if (!player.hasPermission("movecraft.squadron.cruise")) {
 	        player.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Insufficient Permissions"));
 	        return;
 	    }

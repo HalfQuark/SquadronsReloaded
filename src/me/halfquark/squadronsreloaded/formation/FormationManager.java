@@ -5,8 +5,6 @@ import java.util.ArrayList;
 
 import javax.annotation.Nullable;
 
-import org.bukkit.Bukkit;
-
 import me.halfquark.squadronsreloaded.SquadronsReloaded;
 
 public class FormationManager {

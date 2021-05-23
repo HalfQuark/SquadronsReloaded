@@ -33,12 +33,8 @@ public class SRDescendSign implements Listener {
         	return;
         boolean setDescend = line.equalsIgnoreCase("Descend: OFF");
         String setLine = (setDescend)?("Descend: ON"):("Descend: OFF");
-        Squadron sq = SquadronManager.getInstance().getSquadron(player);
+        Squadron sq = SquadronManager.getInstance().getSquadron(player, true);
 		if(sq == null)
-			return;
-		if(sq.getCrafts() == null)
-			return;
-		if(sq.getCrafts().size() == 0)
 			return;
         
 		for(Craft c : sq.getCrafts()) {

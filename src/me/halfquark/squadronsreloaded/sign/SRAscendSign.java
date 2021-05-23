@@ -33,12 +33,8 @@ public class SRAscendSign implements Listener {
         	return;
         boolean setAscend = line.equalsIgnoreCase("Ascend: OFF");
         String setLine = (setAscend)?("Ascend: ON"):("Ascend: OFF");
-        Squadron sq = SquadronManager.getInstance().getSquadron(player);
+        Squadron sq = SquadronManager.getInstance().getSquadron(player, true);
 		if(sq == null)
-			return;
-		if(sq.getCrafts() == null)
-			return;
-		if(sq.getCrafts().size() == 0)
 			return;
         
 		for(Craft c : sq.getCrafts()) {

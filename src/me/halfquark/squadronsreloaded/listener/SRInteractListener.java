@@ -1,6 +1,7 @@
 package me.halfquark.squadronsreloaded.listener;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.bukkit.entity.Player;
@@ -11,7 +12,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.RegisteredListener;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import me.halfquark.squadronsreloaded.SquadronsReloaded;
 import me.halfquark.squadronsreloaded.move.CraftTranslateManager;
 import me.halfquark.squadronsreloaded.squadron.Squadron;
 import me.halfquark.squadronsreloaded.squadron.SquadronManager;
@@ -23,20 +26,40 @@ import net.countercraft.movecraft.utils.MathUtils;
 
 public class SRInteractListener implements Listener {
 	
+	private Map<Player, Long> timeMap;
+	
+	@SuppressWarnings("unchecked")
+	public SRInteractListener() {
+		HandlerList handlers = PlayerInteractEvent.getHandlerList();
+		for(RegisteredListener l : handlers.getRegisteredListeners()) {
+            if (!l.getPlugin().isEnabled()) {
+                continue;
+            }
+            if(l.getListener() instanceof InteractListener) {
+                InteractListener pl = (InteractListener) l.getListener();
+                Class<InteractListener> plclass = InteractListener.class;
+                try {
+                    Field field = plclass.getDeclaredField("timeToReleaseAfter");
+                    field.setAccessible(true);
+                    timeMap = (Map<Player, Long>) field.get(pl);
+                }
+                catch(Exception exception) {
+                    exception.printStackTrace();
+                    timeMap = new HashMap<>();
+                }
+                return;
+            }
+		}
+		timeMap = new HashMap<>();
+	}
+	
 	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerInteractStick(PlayerInteractEvent event) {
-		Squadron sq = SquadronManager.getInstance().getSquadron(event.getPlayer());
+		Squadron sq = SquadronManager.getInstance().getSquadron(event.getPlayer(), true);
 		if(sq == null)
 			return;
-		if(sq.getCrafts() == null)
-			return;
-		if(sq.getCrafts().size() == 0)
-			return;
 		Craft carrier = sq.getCarrier();
-		if(carrier == null)
-			return;
-		
 		if (event.getItem() == null || event.getItem().getTypeId() != Settings.PilotTool)
 	        return;
 		
@@ -54,28 +77,8 @@ public class SRInteractListener implements Listener {
 		    	return;
 			
 		    //Prevent carrier from moving
-		    HandlerList handlers = event.getHandlers();
-            RegisteredListener[] listeners = handlers.getRegisteredListeners();
-            for (RegisteredListener l : listeners) {
-                if (!l.getPlugin().isEnabled()) {
-                    continue;
-                }
-                if(l.getListener() instanceof InteractListener) {
-                	InteractListener pl = (InteractListener) l.getListener();
-                    Class<InteractListener> plclass = InteractListener.class;
-                    try {
-                        Field field = plclass.getDeclaredField("timeMap");
-                        field.setAccessible(true);
-                        @SuppressWarnings("unchecked")
-						final Map<Player, Long> timeMap = (Map<Player, Long>) field.get(pl);
-                        if(timeMap.containsKey(event.getPlayer())) {
-                            timeMap.put(event.getPlayer(), System.currentTimeMillis());
-                        }
-                    }
-                    catch(Exception exception) {
-                        exception.printStackTrace();
-                    }
-                }
+		    if(timeMap.containsKey(event.getPlayer())) {
+                timeMap.put(event.getPlayer(), System.currentTimeMillis());
             }
 		    
 		    for(Craft craft : sq.getCrafts()) {
@@ -118,7 +121,13 @@ public class SRInteractListener implements Listener {
 				        dz = 0;
 				    }
 			    }
-			    CraftTranslateManager.getInstance().translateCraft(craft, dx, dy, dz);
+			    final int fx = dx, fy = dy, fz = dz;
+			    new BukkitRunnable() {
+					@Override
+					public void run() {
+						CraftTranslateManager.getInstance().translateCraft(craft, fx, fy, fz);
+					}
+		        }.runTaskLater(SquadronsReloaded.getInstance(), sq.getCraftRank(craft));
 		    }
 		    return;
 		}

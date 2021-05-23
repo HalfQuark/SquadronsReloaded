@@ -28,6 +28,7 @@ import me.halfquark.squadronsreloaded.sign.SRFormationSign;
 import me.halfquark.squadronsreloaded.sign.SRHelmSign;
 import me.halfquark.squadronsreloaded.sign.SRLeadSign;
 import me.halfquark.squadronsreloaded.sign.SRReleaseSign;
+import me.halfquark.squadronsreloaded.sign.SRSyncedSign;
 import me.halfquark.squadronsreloaded.squadron.SquadronManager;
 import net.countercraft.movecraft.CruiseDirection;
 
@@ -48,6 +49,8 @@ public class SquadronsReloaded extends JavaPlugin {
 	public static double SQUADMAXDISP;
 	public static double SQUADMAXDISPCARRIERMULT;
 	public static double FORMATIONROUNDDISTANCE;
+	
+	public static List<String> SYNCEDSIGNS;
 	
 	@Override
 	public void onEnable() {
@@ -72,6 +75,7 @@ public class SquadronsReloaded extends JavaPlugin {
 		SQUADMAXDISP = getConfig().getDouble("squadMaxDisplacement");
 		SQUADMAXDISPCARRIERMULT = getConfig().getDouble("squadMaxDisplacementCarrierMultiplier");
 		FORMATIONROUNDDISTANCE = getConfig().getDouble("formationRoundDistance");
+		SYNCEDSIGNS = getConfig().getStringList("syncedSigns");
 		
 		File[] files = SquadronsReloaded.FORMATIONFOLDER.listFiles();
 		if(files == null)
@@ -92,8 +96,8 @@ public class SquadronsReloaded extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new SRLeadSign(), this);
 		getServer().getPluginManager().registerEvents(new SRReleaseSign(), this);
 		getServer().getPluginManager().registerEvents(new SRFormationSign(), this);
-		//Remote signs on squadrons turned out to be a very bad idea
-		//getServer().getPluginManager().registerEvents(new SRRemoteSign(), this);
+		getServer().getPluginManager().registerEvents(new SRSyncedSign(), this);
+		
 		getServer().getPluginManager().registerEvents(new ReleaseListener(), this);
 		getServer().getPluginManager().registerEvents(new SinkListener(), this);
 		getServer().getPluginManager().registerEvents(new SwitchListener(), this);

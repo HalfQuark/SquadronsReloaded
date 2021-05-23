@@ -19,10 +19,10 @@ public class ReleaseListener implements Listener {
 			return;
 		if(!SquadronManager.getInstance().hasSquadron(p))
 			return;
-		Squadron sq = SquadronManager.getInstance().getSquadron(p);
+		Squadron sq = SquadronManager.getInstance().getSquadron(p, true);
 		if(sq.getCarrier() != null) {
 			if(sq.getCarrier().equals(e.getCraft())) {
-				SquadronManager.getInstance().getSquadron(p).releaseAll(e.getReason());
+				SquadronManager.getInstance().getSquadron(p, false).releaseAll(e.getReason());
 				SquadronManager.getInstance().removeSquadron(p);
 				return;
 			}
