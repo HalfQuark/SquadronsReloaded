@@ -56,7 +56,7 @@ all crafts of the squadron will try to mimic it.
  The first line of the clicked sign won't be considered, so if for example we want to fire all torpedoes either include the same name in all LaunchTorpedo signs or include another line which also says LaunchTorpedo on the clicked sign.  
 ## Formations:  
  When forming up a formation name and spacing must be specified.  
- Crafts will then try to form up when the squadron is stick-moved to prevent weird behaviour while cruising.  
+ Crafts will always try to form up when not cruising.  
  Formations can be customised via .formation files in the Formations folder:  
     name: [Formation Name]  
     minSpacing: Minimum valid integer for spacing  
@@ -90,7 +90,7 @@ all crafts of the squadron will try to mimic it.
  On detection if conflicting cruise signs are found the craft won't be added to the squadron.  
  The "front" of a craft is determined by the cruise sign on detection.  
  If this is missing it is determined by the first cruise movement it performs.  
- Crafts when moved will try to correct their orientation to face in the same direction as the lead craft.  
+ Crafts will always try to correct their orientation to face in the same direction as the lead craft.  
 
 ## Custom signs:  
  SquadronRelease - same as release command  
@@ -125,5 +125,6 @@ all crafts of the squadron will try to mimic it.
    Final squadron max displacement = squadMaxDisplacement + squadMaxDisplacementCarrierMultiplier * carrier displacement when piloted  
  turnTicks - specify how many ticks the plugin will wait to try to correct a craft's orientation after it moves  
  formationRoundDistance - specify min distance from formation position at which crafts won't attempt to form up anymore  
+ formationSpeedMultiplier - speed multiplied used when forming up, multiplied to the default movement tick delay of the crafts  
  syncedSigns - list of types of sign which will be syncronised across squadron crafts  
 
