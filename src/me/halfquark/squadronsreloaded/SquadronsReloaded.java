@@ -19,6 +19,7 @@ import me.halfquark.squadronsreloaded.listener.SRSignLeftClickListener;
 import me.halfquark.squadronsreloaded.listener.SinkListener;
 import me.halfquark.squadronsreloaded.listener.SwitchListener;
 import me.halfquark.squadronsreloaded.listener.TranslationListener;
+import me.halfquark.squadronsreloaded.move.CraftProximityManager;
 import me.halfquark.squadronsreloaded.move.CraftRotateManager;
 import me.halfquark.squadronsreloaded.move.CraftTranslateManager;
 import me.halfquark.squadronsreloaded.sign.SRAscendSign;
@@ -49,6 +50,7 @@ public class SquadronsReloaded extends JavaPlugin {
 	public static double SQUADMAXDISP;
 	public static double SQUADMAXDISPCARRIERMULT;
 	public static double FORMATIONROUNDDISTANCE;
+	public static double FORMATIONSPEEDMULTIPLIER;
 	
 	public static List<String> SYNCEDSIGNS;
 	
@@ -76,6 +78,7 @@ public class SquadronsReloaded extends JavaPlugin {
 		SQUADMAXDISPCARRIERMULT = getConfig().getDouble("squadMaxDisplacementCarrierMultiplier");
 		FORMATIONROUNDDISTANCE = getConfig().getDouble("formationRoundDistance");
 		SYNCEDSIGNS = getConfig().getStringList("syncedSigns");
+		FORMATIONSPEEDMULTIPLIER = getConfig().getDouble("formationSpeedMultiplier");
 		
 		File[] files = SquadronsReloaded.FORMATIONFOLDER.listFiles();
 		if(files == null)
@@ -85,6 +88,7 @@ public class SquadronsReloaded extends JavaPlugin {
 		FormationManager.initialize();
 		CraftTranslateManager.initialize();
 		CraftRotateManager.initialize();
+		CraftProximityManager.initialize();
 		
 		getServer().getPluginManager().registerEvents(new SRSignLeftClickListener(), this);
 		getServer().getPluginManager().registerEvents(new SRInteractListener(), this);

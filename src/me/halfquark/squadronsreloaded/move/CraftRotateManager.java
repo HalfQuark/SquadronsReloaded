@@ -19,6 +19,7 @@ public class CraftRotateManager {
 	
 	private static CraftRotateManager inst;
 	private static final Map<Craft, CruiseDirection> directionMap = new HashMap<>();
+	private static final Map<Craft, Boolean> turningMap = new HashMap<>();
 	
 	public static void initialize() {
 		inst = new CraftRotateManager();
@@ -49,14 +50,18 @@ public class CraftRotateManager {
 	
 	public void adjustDirection(Squadron sq, Craft craft) {
 		CruiseDirection cd = CraftRotateManager.getInstance().getDirection(craft);
+		if(turningMap.getOrDefault(craft, false))
+			return;
 		if(cd != null && sq.getDirection() != null) {
 			if(!cd.equals(sq.getDirection())) {
 				Rotation rotation = subtractDirections(sq.getDirection(), cd);
+				turningMap.put(craft, true);
 				new BukkitRunnable() {
 		            @Override
 		            public void run() {
 		            	craft.setLastRotateTime(0L);
 		            	craft.rotate(rotation, craft.getHitBox().getMidPoint());
+		            	turningMap.remove(craft);
 		            }
 		        }.runTaskLater(SquadronsReloaded.getInstance(), SquadronsReloaded.TURNTICKS);
 			}

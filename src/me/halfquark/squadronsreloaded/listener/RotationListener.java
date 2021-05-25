@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
+import me.halfquark.squadronsreloaded.move.CraftProximityManager;
 import me.halfquark.squadronsreloaded.move.CraftRotateManager;
 import me.halfquark.squadronsreloaded.squadron.Squadron;
 import me.halfquark.squadronsreloaded.squadron.SquadronManager;
@@ -14,19 +15,24 @@ public class RotationListener implements Listener {
 	
 	@EventHandler
 	public void onCraftRotate(CraftRotateEvent e) {
-		CraftRotateManager.getInstance().registerRotation(e.getCraft(), e.getRotation());
 		Player p = e.getCraft().getNotificationPlayer();
 		Craft craft = e.getCraft();
+		CraftProximityManager.getInstance().updateCraft(craft, e.getNewHitBox());
 		Squadron sq = SquadronManager.getInstance().getSquadron(p, true);
 		if(sq == null)
 			return;
 		if(!sq.hasCraft(e.getCraft()))
 			return;
+		if(CraftProximityManager.getInstance().check(p, craft, e.getNewHitBox())) {
+			e.setCancelled(true);
+			e.setFailMessage("Squadron craft obstructed");
+			return;
+		}
+		CraftRotateManager.getInstance().registerRotation(e.getCraft(), e.getRotation());
 		if(craft.equals(sq.getLeadCraft()))
 			sq.setDirection(CraftRotateManager.getInstance().getDirection(craft));
 		//Bad idea, rotation calls this
 		//CraftRotateManager.getInstance().adjustDirection(sq, craft);
-		
 	}
 	
 }

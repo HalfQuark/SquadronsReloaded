@@ -13,6 +13,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.halfquark.squadronsreloaded.SquadronsReloaded;
+import me.halfquark.squadronsreloaded.formation.FormationFormer;
+import me.halfquark.squadronsreloaded.move.CraftRotateManager;
 import net.countercraft.movecraft.craft.Craft;
 
 public class SquadronManager {
@@ -31,7 +33,7 @@ public class SquadronManager {
             public void run() {
                 updateSquadrons();
             }
-        }.runTaskTimerAsynchronously(SquadronsReloaded.getInstance(), 20*30, 20*30);
+        }.runTaskTimerAsynchronously(SquadronsReloaded.getInstance(), 2, 2);
 	}
 	
 	public static SquadronManager getInstance() {return inst;}
@@ -83,8 +85,12 @@ public class SquadronManager {
 				squads.remove(entry.getKey());
 			}
 			for(Craft craft : sq.getCrafts()) {
-				if(!craft.getCruising())
-					craft.setLastCruiseUpdate(System.currentTimeMillis());
+				CraftRotateManager.getInstance().adjustDirection(sq, craft);
+				if(craft.getCruising())
+					continue;
+				if(sq.isFormingUp())
+					FormationFormer.formUp(craft, sq);
+				craft.setLastCruiseUpdate(System.currentTimeMillis());
 			}
 		}
 	}

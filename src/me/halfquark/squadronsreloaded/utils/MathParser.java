@@ -106,8 +106,15 @@ public class MathParser {
 			Double res = null;
 			if(s.equals("+"))
 				res = (Double) scanExp.get(i - 1) + (Double) scanExp.get(i + 1);
-			if(s.equals("-"))
-				res = (Double) scanExp.get(i - 1) - (Double) scanExp.get(i + 1);
+			if(s.equals("-")) {
+				if(i == 0) {
+					res = (Double) scanExp.get(i + 1) * -1;
+				} else if(!(scanExp.get(i - 1) instanceof Double)) {
+					res = (Double) scanExp.get(i + 1) * -1;
+				} else {
+					res = (Double) scanExp.get(i - 1) - (Double) scanExp.get(i + 1);
+				}
+			}
 			if(res == null)
 				continue;
 			if(res.isNaN())

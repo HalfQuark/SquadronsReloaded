@@ -12,9 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.plugin.RegisteredListener;
-import org.bukkit.scheduler.BukkitRunnable;
 
-import me.halfquark.squadronsreloaded.SquadronsReloaded;
 import me.halfquark.squadronsreloaded.move.CraftTranslateManager;
 import me.halfquark.squadronsreloaded.squadron.Squadron;
 import me.halfquark.squadronsreloaded.squadron.SquadronManager;
@@ -39,7 +37,7 @@ public class SRInteractListener implements Listener {
                 InteractListener pl = (InteractListener) l.getListener();
                 Class<InteractListener> plclass = InteractListener.class;
                 try {
-                    Field field = plclass.getDeclaredField("timeToReleaseAfter");
+                    Field field = plclass.getDeclaredField("timeMap");
                     field.setAccessible(true);
                     timeMap = (Map<Player, Long>) field.get(pl);
                 }
@@ -122,12 +120,13 @@ public class SRInteractListener implements Listener {
 				    }
 			    }
 			    final int fx = dx, fy = dy, fz = dz;
-			    new BukkitRunnable() {
+			    CraftTranslateManager.getInstance().translateCraft(craft, fx, fy, fz);
+			    /*new BukkitRunnable() {
 					@Override
 					public void run() {
 						CraftTranslateManager.getInstance().translateCraft(craft, fx, fy, fz);
 					}
-		        }.runTaskLater(SquadronsReloaded.getInstance(), sq.getCraftRank(craft));
+		        }.runTaskLater(SquadronsReloaded.getInstance(), sq.getCraftRank(craft));*/
 		    }
 		    return;
 		}

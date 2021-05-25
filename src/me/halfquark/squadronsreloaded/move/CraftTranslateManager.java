@@ -63,14 +63,13 @@ public class CraftTranslateManager {
 	
 	@SuppressWarnings("deprecation")
 	public void forceTranslateCraft(Craft craft, int dx, int dy, int dz) {
+		timeMap.put(craft, 0L);
 		craft.translate(dx, dy, dz);
 	    timeMap.put(craft, System.currentTimeMillis());
 	    craft.setLastCruiseUpdate(System.currentTimeMillis());
 	}
 	
 	private void performPendingMove(Craft craft) {
-		if(isInCooldown(craft))
-			return;
 		if(!pendingMoves.containsKey(craft))
 			return;
 		Location loc = pendingMoves.get(craft);
@@ -83,6 +82,8 @@ public class CraftTranslateManager {
 	}
 	
 	public void scheduleMove(Craft craft, Location loc) {
+		if(pendingMoves.containsKey(craft))
+			return;
 		pendingMoves.put(craft, loc);
 		if(!isInCooldown(craft))
 			performPendingMove(craft);
@@ -90,7 +91,7 @@ public class CraftTranslateManager {
             @Override
             public void run() {
                 performPendingMove(craft);
-            }
-        }.runTaskLater(SquadronsReloaded.getInstance(), getTicksCooldown(craft) + 1);
+            }  
+        }.runTaskLater(SquadronsReloaded.getInstance(), (long) (getTicksCooldown(craft) * SquadronsReloaded.FORMATIONSPEEDMULTIPLIER));
 	}
 }

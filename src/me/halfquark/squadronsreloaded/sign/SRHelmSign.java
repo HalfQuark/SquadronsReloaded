@@ -8,9 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 
-import me.halfquark.squadronsreloaded.SquadronsReloaded;
 import me.halfquark.squadronsreloaded.squadron.Squadron;
 import me.halfquark.squadronsreloaded.squadron.SquadronManager;
 import net.countercraft.movecraft.MovecraftLocation;
@@ -67,12 +65,13 @@ public class SRHelmSign implements Listener {
 	        } else {
 	        	mLoc = MathUtils.bukkit2MovecraftLoc(sign.getLocation());
 	        }
-	        new BukkitRunnable() {
+	        craft.rotate(rotation, mLoc);
+	        /*new BukkitRunnable() {
 				@Override
 				public void run() {
 					craft.rotate(rotation, mLoc);
 				}
-	        }.runTaskLater(SquadronsReloaded.getInstance(), sq.getCraftRank(craft));
+	        }.runTaskLater(SquadronsReloaded.getInstance(), sq.getCraftRank(craft));*/
 	    }
 	    
         event.setCancelled(true);

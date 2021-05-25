@@ -11,5 +11,6 @@ squadMaxSizeCarrierMultiplier: 0.0
 squadMaxDisplacement: 12000
 squadMaxDisplacementCarrierMultiplier: 0.0
 formationRoundDistance: 3.0
+formationSpeedMultiplier: 0.5
 syncedSigns:
   - LaunchTorpedo
