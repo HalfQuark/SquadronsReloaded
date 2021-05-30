@@ -122,10 +122,14 @@ all crafts of the squadron will try to mimic it.
  tpToNewLead - if true the plugin will try to tp the player to the new squadron lead craft when the current one is sunk if the player is standing on it  
  squadMaxSize - (double) specify the base maximum number of crafts allowed on a squadron  
  squadMaxSizeCarrierMultiplier - (double) specify the carrier displacement multiplier  
-  > Final squadron max number of crafts = squadMaxSize + squadMaxSizeCarrierMultiplier * carrier displacement when piloted  
+ ```
+  Final squadron max number of crafts = squadMaxSize + squadMaxSizeCarrierMultiplier * carrier displacement when piloted  
+ ```
  squadMaxDisplacement - (double) specify the base maximum displacement allowed on a squadron  
  squadMaxDisplacementCarrierMultiplier: - (double) specify the carrier displacement multiplier  
-  > Final squadron max displacement = squadMaxDisplacement + squadMaxDisplacementCarrierMultiplier * carrier displacement when piloted  
+ ```
+  Final squadron max displacement = squadMaxDisplacement + squadMaxDisplacementCarrierMultiplier * carrier displacement when piloted  
+ ```
  turnTicks - specify how many ticks the plugin will wait to try to correct a craft's orientation after it moves  
  formationRoundDistance - specify min distance from formation position at which crafts won't attempt to form up anymore  
  formationSpeedMultiplier - speed multiplied used when forming up, multiplied to the default movement tick delay of the crafts  
