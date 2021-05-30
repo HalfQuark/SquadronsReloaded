@@ -16,6 +16,7 @@ import me.halfquark.squadronsreloaded.formation.FormationManager;
 public class SquadronCommand implements TabExecutor {
 
 	ManOverBoardSubcommand mo;
+	CarrierSubcommand carrier;
 	CruiseSubcommand cruise;
 	ReleaseSubcommand release;
 	ScuttleSubcommand scuttle;
@@ -25,6 +26,7 @@ public class SquadronCommand implements TabExecutor {
 	
 	public SquadronCommand() {
 		mo = new ManOverBoardSubcommand();
+		carrier = new CarrierSubcommand();
 		cruise = new CruiseSubcommand();
 		release = new ReleaseSubcommand();
 		scuttle = new ScuttleSubcommand();
@@ -40,9 +42,11 @@ public class SquadronCommand implements TabExecutor {
 		if(args.length == 0)
 			return false;
 		switch(args[0].toLowerCase()) {
-		case "manoverboard":
-		case "mo":
+		case "lead":
 			mo.run(sender, args);
+			break;
+		case "carrier":
+			carrier.run(sender, args);
 			break;
 		case "cruise":
 			cruise.run(sender, args);

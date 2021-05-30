@@ -18,7 +18,7 @@ public class RotationListener implements Listener {
 		Player p = e.getCraft().getNotificationPlayer();
 		Craft craft = e.getCraft();
 		CraftProximityManager.getInstance().updateCraft(craft, e.getNewHitBox());
-		Squadron sq = SquadronManager.getInstance().getSquadron(p, true);
+		Squadron sq = SquadronManager.getInstance().getPlayerSquadron(p, true);
 		if(sq == null)
 			return;
 		if(!sq.hasCraft(e.getCraft()))

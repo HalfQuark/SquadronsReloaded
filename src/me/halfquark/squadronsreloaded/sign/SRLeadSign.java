@@ -36,7 +36,7 @@ public class SRLeadSign implements Listener {
         if(!line.equalsIgnoreCase("SquadronLead"))
         	return;
         
-        Squadron sq = SquadronManager.getInstance().getSquadron(event.getPlayer(), true);
+        Squadron sq = SquadronManager.getInstance().getPlayerSquadron(event.getPlayer(), true);
         if(sq == null) {
         	player.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Squadrons - No Squadron Found"));
             return;

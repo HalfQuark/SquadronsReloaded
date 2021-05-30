@@ -54,7 +54,7 @@ public class SRInteractListener implements Listener {
 	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerInteractStick(PlayerInteractEvent event) {
-		Squadron sq = SquadronManager.getInstance().getSquadron(event.getPlayer(), true);
+		Squadron sq = SquadronManager.getInstance().getPlayerSquadron(event.getPlayer(), true);
 		if(sq == null)
 			return;
 		Craft carrier = sq.getCarrier();

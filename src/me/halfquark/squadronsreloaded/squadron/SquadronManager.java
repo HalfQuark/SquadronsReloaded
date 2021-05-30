@@ -40,6 +40,9 @@ public class SquadronManager {
 	
 	public void putSquadron(Player p, Squadron s) {squads.put(p, s);}
 	public void removeSquadron(Player p) {squads.remove(p);}
+	public void removeSquadron(Squadron sq) {
+		squads.entrySet().removeIf(entry -> entry.getValue().equals(sq));
+	}
 	public boolean hasSquadron(Player p) {
 		if(!squads.containsKey(p))
 			return false;
@@ -60,12 +63,21 @@ public class SquadronManager {
 		return true;
 	}
 	@Nullable
-	public Squadron getSquadron(Player p, boolean check) {
+	public Squadron getPlayerSquadron(Player p, boolean check) {
 		if(!check)
 			return squads.get(p);
 		if(hasSquadron(p))
 			return squads.get(p);
 		return null;
+	}
+	
+	public List<Squadron> getCarrierSquadrons(Craft c) {
+		ArrayList<Squadron> squadList = new ArrayList<>();
+		for(Map.Entry<Player, Squadron> entry : squads.entrySet()) {
+			if(c.equals(entry.getValue().getCarrier()))
+				squadList.add(entry.getValue());
+		}
+		return squadList;
 	}
 	public List<Squadron> getSquadronList() {
 		ArrayList<Squadron> squadList = new ArrayList<>();

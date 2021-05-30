@@ -23,7 +23,7 @@ public class FormationSubcommand {
 			pSender.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Insufficient Permissions"));
 			return;
 		}
-		Squadron sq = SquadronManager.getInstance().getSquadron(pSender, true);
+		Squadron sq = SquadronManager.getInstance().getPlayerSquadron(pSender, true);
 		if(sq == null){
 			sender.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Squadrons - No Squadron Found"));
             return;

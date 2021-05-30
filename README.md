@@ -1,10 +1,11 @@
 # SquadronsReloaded
 Movecraft addon which reimplements SquadronDirectors.  
-Code from Movecraft https://github.com/APDevTeam/Movecraft was used.
+Code from Movecraft https://github.com/APDevTeam/Movecraft was used.  
   
 ## Commands:  
 /squadron  
- manoverboard - tps you to lead squadron craft  
+ lead - tps you to lead squadron craft  
+ carrier - tps you to the carrier craft  
  cruise [On,Off,North,East,South,West] - toggles squadron cruise  
  release [player] - releases own squadron or other player's squadron  
  scuttle [player] - scuttles own squadron or other player's squadron  
@@ -100,23 +101,25 @@ all crafts of the squadron will try to mimic it.
  Line 3:[Spacing] - right click to form up, left click to turn off formation  
   
 ## Permissions:  
-  movecraft.squadron.manoverboard  
-  movecraft.squadron.cruise  
-  movecraft.squadron.release  
- movecraft.squadron.release.others  
- movecraft.squadron.scuttle  
- movecraft.squadron.scuttle.others  
- movecraft.squadron.info  
- movecraft.squadron.info.others  
- movecraft.squadron.list  
- movecraft.squadron.pilot  
- movecraft.squadron.formation  
+ movecraft.squadron.lead - permission to use the lead command  
+ movecraft.squadron.carrier - permission to use the lead command  
+ movecraft.squadron.cruise - permission to use the cruise command  
+ movecraft.squadron.release - permission to use the release command  
+ movecraft.squadron.release.others - permission to release other squadrons  
+ movecraft.squadron.scuttle - permission to use the scuttle command  
+ movecraft.squadron.scuttle.others - permission to scuttle other squadrons    
+ movecraft.squadron.info - permission to use the info command  
+ movecraft.squadron.info.others - permission to view other squadrons' info  
+ movecraft.squadron.list - permission to use the list command  
+ movecraft.squadron.pilot - permission to pilot squadrons  
+ movecraft.squadron.formation - permission to use the formations command  
   
 ## Config:  
  carriedTypes - list all craft types which can be carried aka be piloted as a squadron craft  
  carrierTypes - list all crafts which can be used to launch squadrons  
  pilotCheckTicks - specify how many ticks the plugin will wait after a squad craft is piloted to check if it's valid and add it to the squadron (you can leave it at 40)  
  manoverboardTime - specify the manoverboard timer when you fall from a squadron craft  
+ tpToNewLead - if true the plugin will try to tp the player to the new squadron lead craft when the current one is sunk if the player is standing on it  
  squadMaxSize - (double) specify the base maximum number of crafts allowed on a squadron  
  squadMaxSizeCarrierMultiplier - (double) specify the carrier displacement multiplier  
    Final squadron max number of crafts = squadMaxSize + squadMaxSizeCarrierMultiplier * carrier displacement when piloted  

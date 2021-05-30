@@ -81,7 +81,7 @@ public class CraftProximityManager {
 	}
 	
 	public boolean check(Player p, Craft craft, Box craftBox) {
-		Squadron sq = SquadronManager.getInstance().getSquadron(p, true);
+		Squadron sq = SquadronManager.getInstance().getPlayerSquadron(p, true);
 		if(sq == null)
 			return false;
 		if(!sq.hasCraft(craft))

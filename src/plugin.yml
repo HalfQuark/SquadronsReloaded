@@ -1,11 +1,11 @@
 name: SquadronsReloaded
-version: 1.3.2
+version: 1.4.0
 main: me.halfquark.squadronsreloaded.SquadronsReloaded
 depend: [Movecraft]
 
 commands:
    squadron:
-      usage: /squadron [manoverboard|cruise|release|scuttle|formation|info|list]
+      usage: /squadron [lead|carrier|cruise|release|scuttle|formation|info|list]
       aliases: sq
       description: Squadron management
       permission: movecraft.squadron

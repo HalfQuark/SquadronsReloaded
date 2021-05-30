@@ -24,7 +24,7 @@ public class ReleaseSubcommand {
 				pSender.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Insufficient Permissions"));
 				return;
 			}
-			Squadron sq = SquadronManager.getInstance().getSquadron(pSender, true);
+			Squadron sq = SquadronManager.getInstance().getPlayerSquadron(pSender, true);
 			if(sq == null){
 				sender.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Squadrons - No Squadron Found"));
 	            return;
@@ -40,7 +40,7 @@ public class ReleaseSubcommand {
 		}
 		if (args[1].equalsIgnoreCase("-p")) {
             for (Player p : Bukkit.getOnlinePlayers()) {
-            	Squadron sq = SquadronManager.getInstance().getSquadron(p, true);
+            	Squadron sq = SquadronManager.getInstance().getPlayerSquadron(p, true);
             	if(sq == null)
             		continue;
             	sq.releaseAll(Reason.FORCE);
@@ -54,7 +54,7 @@ public class ReleaseSubcommand {
             sender.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Player - Not Found"));
             return;
         }
-		Squadron sq = SquadronManager.getInstance().getSquadron(target, true);
+		Squadron sq = SquadronManager.getInstance().getPlayerSquadron(target, true);
 		if(sq == null){
 			sender.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Squadrons - Player not piloting"));
             return;

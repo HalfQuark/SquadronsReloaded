@@ -28,6 +28,7 @@ import net.countercraft.movecraft.craft.ICraft;
 import net.countercraft.movecraft.events.CraftReleaseEvent.Reason;
 import net.countercraft.movecraft.localisation.I18nSupport;
 import net.countercraft.movecraft.utils.ChatUtils;
+import net.countercraft.movecraft.utils.MathUtils;
 
 public class SRSignLeftClickListener implements Listener {
 
@@ -42,7 +43,7 @@ public class SRSignLeftClickListener implements Listener {
         }
         Sign sign = (Sign) event.getClickedBlock().getState();
         if(sign.getLine(0).equalsIgnoreCase("Formation")) {
-        	Squadron sq = SquadronManager.getInstance().getSquadron(event.getPlayer(), true);
+        	Squadron sq = SquadronManager.getInstance().getPlayerSquadron(event.getPlayer(), true);
             if(sq == null) {
             	event.getPlayer().sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Squadrons - No Squadron Found"));
                 return;
@@ -58,8 +59,19 @@ public class SRSignLeftClickListener implements Listener {
         if(!SquadronsReloaded.CARRIEDTYPES.contains(type.getCraftName()))
         	return;
         Craft pilotedCraft = CraftManager.getInstance().getCraftByPlayer(event.getPlayer());
-        if(pilotedCraft == null)
-        	return;
+        if(pilotedCraft == null) {
+	        for(Craft c : CraftManager.getInstance().getCraftsInWorld(block.getWorld())) {
+	        	if(MathUtils.locationInHitBox(c.getHitBox(), block.getLocation())) {
+	        		pilotedCraft = c;
+	        		break;
+	        	}
+	        }
+        }
+        if(pilotedCraft == null) {
+        	event.getPlayer().sendMessage(I18nSupport.getInternationalisedString(
+                    "Squadrons - Needs to be carried"));
+            return;
+        }
         if(!SquadronsReloaded.CARRIERTYPES.contains(pilotedCraft.getType().getCraftName()))
         	return;
         // Valid sign prompt for ship command.
@@ -73,13 +85,16 @@ public class SRSignLeftClickListener implements Listener {
         }
         Player p = event.getPlayer();
         final boolean newSquadron;
-        if(SquadronManager.getInstance().getSquadron(p, false) == null) {
-        	SquadronManager.getInstance().putSquadron(p, new Squadron(p));
+        Squadron squadron;
+        if(SquadronManager.getInstance().getPlayerSquadron(p, false) == null) {
+        	squadron = new Squadron(p);
+        	squadron.setCarrier(pilotedCraft);
+        	SquadronManager.getInstance().putSquadron(p, squadron);
         	newSquadron = true;
         } else {
-        	newSquadron = false;
+        	squadron = SquadronManager.getInstance().getPlayerSquadron(p, false);
+        	newSquadron = squadron.getLeadCraft() == null;
         }
-        Squadron squadron = SquadronManager.getInstance().getSquadron(p, false);
         // Attempt to run detection
         Location loc = event.getClickedBlock().getLocation();
         MovecraftLocation startPoint = new MovecraftLocation(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
@@ -89,6 +104,7 @@ public class SRSignLeftClickListener implements Listener {
         	return;
         c.detect(null, event.getPlayer(), startPoint);
         event.setCancelled(true);
+        final Craft carrier = pilotedCraft;
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -96,58 +112,37 @@ public class SRSignLeftClickListener implements Listener {
             		CraftManager.getInstance().removeCraft(c, Reason.EMPTY);
             		return;
             	}
-            	Craft carrier;
-            	if (squadron.getCarrier() == null) {
-            		carrier = CraftManager.getInstance().getCraftByPlayer(event.getPlayer());
-            		if(carrier == null) {
-            			event.getPlayer().sendMessage(I18nSupport.getInternationalisedString(
-                                "Squadrons - Needs to be carried"));
-                        CraftManager.getInstance().removeCraft(c, Reason.EMPTY);
-                        return;
-            		}
-            		if(!SquadronsReloaded.CARRIERTYPES.contains(carrier.getType().getCraftName())) {
-            			event.getPlayer().sendMessage(I18nSupport.getInternationalisedString(
-                                "Squadrons - Needs to be carried"));
-                        CraftManager.getInstance().removeCraft(c, Reason.EMPTY);
-                        return;
-            		}
-            		squadron.setCarrier(carrier);
-            	} else {
-            		carrier = squadron.getCarrier();
-            	}
             	
             	Set<Craft> craftsInWorld = CraftManager.getInstance().getCraftsInWorld(c.getW());
 
                 boolean isSubcraft = false;
-
-                if (c.getType().getCruiseOnPilot() || p != null) {
-                    for (Craft craft : craftsInWorld) {
-                        if (craft.getHitBox().intersection(c.getHitBox()).isEmpty()) {
-                            continue;
-                        }
-                        if(craft.equals(c))
-                        	continue;
-                        if (craft.getType() == c.getType()
-                                || craft.getHitBox().size() <= c.getHitBox().size()) {
-                            event.getPlayer().sendMessage(I18nSupport.getInternationalisedString(
-                                    "Squadrons - Failed Craft is already being controlled"));
-                            CraftManager.getInstance().removeCraft(c, Reason.EMPTY);
-                            return;
-                        }
-                        if (!craft.isNotProcessing()) {
-                        	event.getPlayer().sendMessage(I18nSupport.getInternationalisedString("Squadrons - Parent Craft is busy"));
-                        	CraftManager.getInstance().removeCraft(c, Reason.EMPTY);
-                        	return;
-                        }
-                        if(!craft.equals(squadron.getCarrier())) {
-                        	event.getPlayer().sendMessage(I18nSupport.getInternationalisedString("Squadrons - Needs to be carried"));
-                        	CraftManager.getInstance().removeCraft(c, Reason.EMPTY);
-                        	return;
-                        }
-                        isSubcraft = true;
-                        craft.setHitBox(craft.getHitBox().difference(c.getHitBox()));
-                        craft.setOrigBlockCount(craft.getOrigBlockCount() - c.getHitBox().size());
+                
+                for (Craft craft : craftsInWorld) {
+                    if (craft.getHitBox().intersection(c.getHitBox()).isEmpty()) {
+                        continue;
                     }
+                    if (craft.equals(c))
+                    	continue;
+                    if (craft.getType() == c.getType()
+                            || craft.getHitBox().size() <= c.getHitBox().size()) {
+                        event.getPlayer().sendMessage(I18nSupport.getInternationalisedString(
+                                "Squadrons - Failed Craft is already being controlled"));
+                        CraftManager.getInstance().removeCraft(c, Reason.EMPTY);
+                        return;
+                    }
+                    if (!craft.isNotProcessing()) {
+                    	event.getPlayer().sendMessage(I18nSupport.getInternationalisedString("Squadrons - Parent Craft is busy"));
+                    	CraftManager.getInstance().removeCraft(c, Reason.EMPTY);
+                    	return;
+                    }
+                    if(!craft.equals(squadron.getCarrier())) {
+                    	event.getPlayer().sendMessage(I18nSupport.getInternationalisedString("Squadrons - Needs to be carried"));
+                    	CraftManager.getInstance().removeCraft(c, Reason.EMPTY);
+                    	return;
+                    }
+                    isSubcraft = true;
+                    craft.setHitBox(craft.getHitBox().difference(c.getHitBox()));
+                    craft.setOrigBlockCount(craft.getOrigBlockCount() - c.getHitBox().size());
                 }
                 if(!isSubcraft) {
                 	event.getPlayer().sendMessage(I18nSupport.getInternationalisedString("Squadrons - Needs to be carried"));

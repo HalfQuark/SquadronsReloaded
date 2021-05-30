@@ -40,7 +40,7 @@ public class SRHelmSign implements Listener {
             return;
         }
         
-        Squadron sq = SquadronManager.getInstance().getSquadron(event.getPlayer(), true);
+        Squadron sq = SquadronManager.getInstance().getPlayerSquadron(event.getPlayer(), true);
 		if(sq == null)
 			return;
         

@@ -37,7 +37,7 @@ public class SRCruiseSign implements Listener {
         	return;
         boolean setCruise = line.equalsIgnoreCase("Cruise: OFF");
         String setLine = (setCruise)?("Cruise: ON"):("Cruise: OFF");
-        Squadron sq = SquadronManager.getInstance().getSquadron(player, true);
+        Squadron sq = SquadronManager.getInstance().getPlayerSquadron(player, true);
 		if(sq == null)
 			return;
 		boolean onBoardCraft = false;

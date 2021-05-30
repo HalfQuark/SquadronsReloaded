@@ -51,7 +51,7 @@ public class SRPlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerMove(PlayerMoveEvent event) {
 		
-		Squadron sq = SquadronManager.getInstance().getSquadron(event.getPlayer(), true);
+		Squadron sq = SquadronManager.getInstance().getPlayerSquadron(event.getPlayer(), true);
 		if(sq == null)
 			return;
 		if(sq.getCarrier() == null) {

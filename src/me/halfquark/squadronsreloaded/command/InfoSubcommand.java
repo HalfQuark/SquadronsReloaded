@@ -31,7 +31,7 @@ public class InfoSubcommand {
 				pSender.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Insufficient Permissions"));
 				return;
 			}
-			Squadron sq = SquadronManager.getInstance().getSquadron(pSender, true);
+			Squadron sq = SquadronManager.getInstance().getPlayerSquadron(pSender, true);
 			if(sq == null){
 				sender.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Squadrons - No Squadron Found"));
 	            return;
@@ -49,7 +49,7 @@ public class InfoSubcommand {
             sender.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Player - Not Found"));
             return;
         }
-		Squadron sq = SquadronManager.getInstance().getSquadron(target, true);
+		Squadron sq = SquadronManager.getInstance().getPlayerSquadron(target, true);
 		if(sq == null){
 			sender.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Squadrons - Player not piloting"));
             return;

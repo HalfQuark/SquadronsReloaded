@@ -1,5 +1,6 @@
 package me.halfquark.squadronsreloaded.sign;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -49,12 +50,8 @@ public class SRSyncedSign implements Listener {
         }
         if(!isSynced)
         	return;
-        Squadron sq = SquadronManager.getInstance().getSquadron(event.getPlayer(), true);
+        Squadron sq = SquadronManager.getInstance().getPlayerSquadron(event.getPlayer(), true);
 		if(sq == null)
-			return;
-		if(sq.getCrafts() == null)
-			return;
-		if(sq.getCrafts().size() == 0)
 			return;
         Craft onCraft = null;
 		for(Craft c : sq.getCrafts()) {
@@ -67,13 +64,12 @@ public class SRSyncedSign implements Listener {
 			return;
         
 		World w = event.getClickedBlock().getWorld();
-		List<String> otherLines = Arrays.asList(
-				ChatColor.stripColor(sign.getLine(1)).toLowerCase(), 
-				ChatColor.stripColor(sign.getLine(2)).toLowerCase(), 
-				ChatColor.stripColor(sign.getLine(3)).toLowerCase());
-		otherLines.removeIf(s -> s.length() == 0);
+		List<String> otherLines = new ArrayList<String>(Arrays.asList(sign.getLines()));
+		otherLines.remove(0);
+		otherLines.replaceAll(s -> s = ChatColor.stripColor(s).toLowerCase());
+		otherLines.removeIf(s -> s.isEmpty());
 		signCooldown.put(event.getPlayer(), true);
-		
+		Bukkit.broadcastMessage(otherLines.toString());
 		for(Craft c : sq.getCrafts()) {
 			if(c.equals(onCraft))
 				continue;
@@ -105,11 +101,15 @@ public class SRSyncedSign implements Listener {
         event.setCancelled(true);
     }
     private boolean isEqualSign(Sign test, String header, List<String> lines) {
-        return ChatColor.stripColor(test.getLine(0)).equalsIgnoreCase(header) && (
-        		lines.contains(ChatColor.stripColor(test.getLine(0)).toLowerCase())
-                || lines.contains(ChatColor.stripColor(test.getLine(1)).toLowerCase())
-                || lines.contains(ChatColor.stripColor(test.getLine(2)).toLowerCase())
-                || lines.contains(ChatColor.stripColor(test.getLine(3)).toLowerCase()) );
+    	if(!ChatColor.stripColor(test.getLine(0)).equalsIgnoreCase(header)) {
+    		return false;
+    	}
+    	for(String s : test.getLines()) {
+    		if(lines.contains(ChatColor.stripColor(s).toLowerCase())) {
+    			return true;
+    		}
+    	}
+        return false;
     }
 	
 }

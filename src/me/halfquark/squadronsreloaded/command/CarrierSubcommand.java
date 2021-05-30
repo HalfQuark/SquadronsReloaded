@@ -13,7 +13,7 @@ import net.countercraft.movecraft.events.ManOverboardEvent;
 import net.countercraft.movecraft.localisation.I18nSupport;
 import net.countercraft.movecraft.utils.ChatUtils;
 
-public class ManOverBoardSubcommand {
+public class CarrierSubcommand {
 
 	public void run(CommandSender sender, String[] args) {
 		if(!(sender instanceof Player)){
@@ -21,7 +21,7 @@ public class ManOverBoardSubcommand {
             return;
         }
 		Player player = (Player) sender;
-		if(!player.hasPermission("movecraft.squadron.lead")) {
+		if(!player.hasPermission("movecraft.squadron.carrier")) {
 			player.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Insufficient Permissions"));
             return;
 		}
@@ -30,14 +30,14 @@ public class ManOverBoardSubcommand {
 			player.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Squadrons - No Squadron Found"));
             return;
 		}
-		Craft leadCraft = sq.getLeadCraft();
-		Location telPoint = getCraftTeleportPoint(leadCraft);
-        if (leadCraft.getW() != player.getWorld()) {
+		Craft carrier = sq.getCarrier();
+		Location telPoint = getCraftTeleportPoint(carrier);
+        if (carrier.getW() != player.getWorld()) {
             player.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("ManOverboard - Other World"));
             return;
         }
 
-        ManOverboardEvent event = new ManOverboardEvent(leadCraft, telPoint);
+        ManOverboardEvent event = new ManOverboardEvent(carrier, telPoint);
         Bukkit.getServer().getPluginManager().callEvent(event);
 
         player.setVelocity(new Vector(0, 0, 0));

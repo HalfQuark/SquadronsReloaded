@@ -5,6 +5,7 @@ carrierTypes:
   - elevator
 pilotCheckTicks: 40
 manoverboardTime: 30000
+tpToNewLead: true
 turnTicks: 2
 squadMaxSize: 12
 squadMaxSizeCarrierMultiplier: 0.0
