@@ -1,6 +1,7 @@
 # SquadronsReloaded
 Movecraft addon which reimplements SquadronDirectors.  
 Code from Movecraft https://github.com/APDevTeam/Movecraft was used.  
+Use legacy branch for Movecraft 7 and 1.12 spigot.
   
 ## Commands:  
 /squadron  
