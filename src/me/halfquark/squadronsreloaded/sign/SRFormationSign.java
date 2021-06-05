@@ -1,7 +1,7 @@
 package me.halfquark.squadronsreloaded.sign;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -15,7 +15,7 @@ import me.halfquark.squadronsreloaded.formation.FormationManager;
 import me.halfquark.squadronsreloaded.squadron.Squadron;
 import me.halfquark.squadronsreloaded.squadron.SquadronManager;
 import net.countercraft.movecraft.localisation.I18nSupport;
-import net.countercraft.movecraft.utils.ChatUtils;
+import net.countercraft.movecraft.util.ChatUtils;
 
 public class SRFormationSign implements Listener {
 
@@ -25,7 +25,7 @@ public class SRFormationSign implements Listener {
             return;
         }
         Block block = event.getClickedBlock();
-        if (block.getType() != Material.SIGN_POST && block.getType() != Material.WALL_SIGN){
+        if (!Tag.SIGNS.isTagged(block.getType())){
             return;
         }
         Player player = event.getPlayer();

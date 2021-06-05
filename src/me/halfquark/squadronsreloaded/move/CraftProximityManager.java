@@ -3,14 +3,13 @@ package me.halfquark.squadronsreloaded.move;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.halfquark.squadronsreloaded.SquadronsReloaded;
 import me.halfquark.squadronsreloaded.squadron.Squadron;
-import me.halfquark.squadronsreloaded.squadron.SquadronManager;
+import me.halfquark.squadronsreloaded.squadron.SquadronCraft;
 import net.countercraft.movecraft.craft.Craft;
-import net.countercraft.movecraft.utils.HitBox;
+import net.countercraft.movecraft.util.hitboxes.HitBox;
 
 public class CraftProximityManager {
 	
@@ -73,15 +72,15 @@ public class CraftProximityManager {
         }.runTaskLater(SquadronsReloaded.getInstance(), 2);
 	}
 	
-	public boolean check(Player p, Craft craft, HitBox newHb) {
+	public boolean check(SquadronCraft craft, HitBox newHb) {
 		if(newHb.isEmpty())
 			return false;
 		Box craftBox = hitBoxToBox(newHb);
-		return check(p, craft, craftBox);
+		return check(craft, craftBox);
 	}
 	
-	public boolean check(Player p, Craft craft, Box craftBox) {
-		Squadron sq = SquadronManager.getInstance().getPlayerSquadron(p, true);
+	public boolean check(SquadronCraft craft, Box craftBox) {
+		Squadron sq = craft.getSquadron();
 		if(sq == null)
 			return false;
 		if(!sq.hasCraft(craft))

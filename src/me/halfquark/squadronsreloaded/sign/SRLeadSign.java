@@ -2,7 +2,7 @@ package me.halfquark.squadronsreloaded.sign;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -17,7 +17,7 @@ import me.halfquark.squadronsreloaded.squadron.SquadronManager;
 import net.countercraft.movecraft.craft.Craft;
 import net.countercraft.movecraft.events.ManOverboardEvent;
 import net.countercraft.movecraft.localisation.I18nSupport;
-import net.countercraft.movecraft.utils.ChatUtils;
+import net.countercraft.movecraft.util.ChatUtils;
 
 public class SRLeadSign implements Listener {
 
@@ -27,7 +27,7 @@ public class SRLeadSign implements Listener {
             return;
         }
         Block block = event.getClickedBlock();
-        if (block.getType() != Material.SIGN_POST && block.getType() != Material.WALL_SIGN){
+        if (!Tag.SIGNS.isTagged(block.getType())){
             return;
         }
         Player player = event.getPlayer();
@@ -59,7 +59,7 @@ public class SRLeadSign implements Listener {
         double telX = (craft.getHitBox().getMinX() + craft.getHitBox().getMaxX())/2D + 0.5D;
         double telZ = (craft.getHitBox().getMinZ() + craft.getHitBox().getMaxZ())/2D + 0.5D;
         double telY = craft.getHitBox().getMaxY() + 1;
-        return new Location(craft.getW(), telX, telY, telZ);
+        return new Location(craft.getWorld(), telX, telY, telZ);
     }
 	
 }

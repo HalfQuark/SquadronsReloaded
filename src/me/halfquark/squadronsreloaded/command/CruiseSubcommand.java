@@ -8,7 +8,7 @@ import me.halfquark.squadronsreloaded.squadron.SquadronManager;
 import net.countercraft.movecraft.CruiseDirection;
 import net.countercraft.movecraft.craft.Craft;
 import net.countercraft.movecraft.localisation.I18nSupport;
-import net.countercraft.movecraft.utils.ChatUtils;
+import net.countercraft.movecraft.util.ChatUtils;
 
 public class CruiseSubcommand {
 

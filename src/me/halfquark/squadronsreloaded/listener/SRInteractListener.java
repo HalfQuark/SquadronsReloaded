@@ -18,9 +18,10 @@ import me.halfquark.squadronsreloaded.squadron.Squadron;
 import me.halfquark.squadronsreloaded.squadron.SquadronManager;
 import net.countercraft.movecraft.config.Settings;
 import net.countercraft.movecraft.craft.Craft;
+import net.countercraft.movecraft.craft.PlayerCraft;
 import net.countercraft.movecraft.listener.InteractListener;
 import net.countercraft.movecraft.localisation.I18nSupport;
-import net.countercraft.movecraft.utils.MathUtils;
+import net.countercraft.movecraft.util.MathUtils;
 
 public class SRInteractListener implements Listener {
 	
@@ -51,14 +52,13 @@ public class SRInteractListener implements Listener {
 		timeMap = new HashMap<>();
 	}
 	
-	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerInteractStick(PlayerInteractEvent event) {
 		Squadron sq = SquadronManager.getInstance().getPlayerSquadron(event.getPlayer(), true);
 		if(sq == null)
 			return;
-		Craft carrier = sq.getCarrier();
-		if (event.getItem() == null || event.getItem().getTypeId() != Settings.PilotTool)
+		PlayerCraft carrier = sq.getCarrier();
+		if (event.getItem() == null || event.getItem().getType() != Settings.PilotTool)
 	        return;
 		
 		if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
@@ -91,7 +91,7 @@ public class SRInteractListener implements Listener {
 			    int dx = 0;
 			    int dz = 0;
 			    int dy = 0;
-			    if (craft.getPilotLocked()) {
+			    if (carrier.getPilotLocked()) {
 			        // right click moves up or down if using direct
 			        // control
 			        dy = 1;
@@ -131,7 +131,7 @@ public class SRInteractListener implements Listener {
 		    return;
 		}
 		
-		if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
+		/*if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
             if (event.getItem() == null || event.getItem().getTypeId() != Settings.PilotTool) {
                 return;
             }
@@ -148,7 +148,7 @@ public class SRInteractListener implements Listener {
 	            craft.setPilotLocked(!carrier.getPilotLocked());
             }
             return;
-        }
+        }*/
 		
 	}	
 	

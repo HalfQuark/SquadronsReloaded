@@ -35,7 +35,7 @@ public class CraftTranslateManager {
 		final CraftType type = craft.getType();
 		int currentGear = craft.getCurrentGear();
 	    Long time = timeMap.get(craft);
-	    World w = craft.getW();
+	    World w = craft.getWorld();
 	    int tickCooldown = craft.getType().getTickCooldown(w);
 	    if (type.getGearShiftsAffectDirectMovement() && type.getGearShiftsAffectTickCooldown()) {
 	        tickCooldown *= currentGear;
@@ -45,7 +45,7 @@ public class CraftTranslateManager {
 	
 	        // if the craft should go slower underwater, make time
 	        // pass more slowly there
-	        if (craft.getType().getHalfSpeedUnderwater() && craft.getHitBox().getMinY() < craft.getW().getSeaLevel())
+	        if (craft.getType().getHalfSpeedUnderwater() && craft.getHitBox().getMinY() < craft.getWorld().getSeaLevel())
 	            ticksElapsed = ticksElapsed >> 1;
 	        return Math.max(tickCooldown - Math.abs(ticksElapsed), 0L);
 	    }

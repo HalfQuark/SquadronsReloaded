@@ -1,14 +1,12 @@
 package me.halfquark.squadronsreloaded.listener;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 
 import me.halfquark.squadronsreloaded.move.CraftProximityManager;
 import me.halfquark.squadronsreloaded.move.CraftRotateManager;
 import me.halfquark.squadronsreloaded.squadron.Squadron;
-import me.halfquark.squadronsreloaded.squadron.SquadronManager;
-import net.countercraft.movecraft.craft.Craft;
+import me.halfquark.squadronsreloaded.squadron.SquadronCraft;
 import net.countercraft.movecraft.events.CraftTranslateEvent;
 
 public class TranslationListener implements Listener {
@@ -17,16 +15,13 @@ public class TranslationListener implements Listener {
 	public void onCraftTranslate(CraftTranslateEvent e) {
 		if(e.getCraft().getCruising())
 			CraftRotateManager.getInstance().registerCruise(e.getCraft(), e.getCraft().getCruiseDirection());
-		Player p = e.getCraft().getNotificationPlayer();
-		Craft craft = e.getCraft();
+		if(!(e.getCraft() instanceof SquadronCraft))
+			return;
+		SquadronCraft craft = (SquadronCraft) e.getCraft();
 		CraftProximityManager.getInstance().updateCraft(craft, e.getNewHitBox());
-		Squadron sq = SquadronManager.getInstance().getPlayerSquadron(p, true);
-		if(sq == null)
-			return;
-		if(!sq.hasCraft(e.getCraft()))
-			return;
+		Squadron sq = craft.getSquadron();
 		if(!e.getNewHitBox().isEmpty()) {
-			if(CraftProximityManager.getInstance().check(p, craft, e.getNewHitBox())) {
+			if(CraftProximityManager.getInstance().check(craft, e.getNewHitBox())) {
 				e.setCancelled(true);
 				e.setFailMessage("Squadron craft obstructed");
 				return;

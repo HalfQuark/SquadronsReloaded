@@ -14,13 +14,14 @@ import me.halfquark.squadronsreloaded.formation.Formation;
 import net.countercraft.movecraft.CruiseDirection;
 import net.countercraft.movecraft.craft.Craft;
 import net.countercraft.movecraft.craft.CraftManager;
+import net.countercraft.movecraft.craft.PlayerCraft;
 import net.countercraft.movecraft.events.CraftReleaseEvent.Reason;
 
 public class Squadron {
 	
 	private Player pilot;
-	private ConcurrentMap<Craft, Integer> crafts;
-	private Craft carrier;
+	private ConcurrentMap<SquadronCraft, Integer> crafts;
+	private PlayerCraft carrier;
 	private int nextId;
 	private Formation formation;
 	private Integer spacing;
@@ -36,8 +37,8 @@ public class Squadron {
 	}
 	
 	public Player getPilot() {return pilot;}
-	public ConcurrentMap<Craft, Integer> getCraftMap() {return crafts;}
-	public Set<Craft> getCrafts() {return crafts.keySet();}
+	public ConcurrentMap<SquadronCraft, Integer> getCraftMap() {return crafts;}
+	public Set<SquadronCraft> getCrafts() {return crafts.keySet();}
 	public Formation getFormation() {return formation;}
 	public Integer getSpacing() {return spacing;}
 	public boolean isFormingUp() {return formation != null;}
@@ -55,16 +56,16 @@ public class Squadron {
 		return displacement;
 	}
 	@Nullable
-	public Craft getCarrier() {return carrier;}
-	public void setCarrier(Craft c) {carrier = c;}
+	public PlayerCraft getCarrier() {return carrier;}
+	public void setCarrier(PlayerCraft c) {carrier = c;}
 	
 	@Nullable
-	public Craft getLeadCraft() {
+	public SquadronCraft getLeadCraft() {
 		int min = -1;
-		Craft leadCraft = null;
+		SquadronCraft leadCraft = null;
 		if(crafts == null)
 			return null;
-		for(Entry<Craft, Integer> entry : crafts.entrySet()) {
+		for(Entry<SquadronCraft, Integer> entry : crafts.entrySet()) {
 			if(min == -1) {
 				min = entry.getValue();
 				leadCraft = entry.getKey();
@@ -83,7 +84,7 @@ public class Squadron {
 		int min = -1;
 		if(crafts == null)
 			return null;
-		for(Entry<Craft, Integer> entry : crafts.entrySet()) {
+		for(Entry<SquadronCraft, Integer> entry : crafts.entrySet()) {
 			if(min == -1) {
 				min = entry.getValue();
 				continue;
@@ -113,14 +114,14 @@ public class Squadron {
 			return null;
 		int id = crafts.get(craft);
 		int rank = 0;
-		for(Entry<Craft, Integer> entry : crafts.entrySet()) {
+		for(Entry<SquadronCraft, Integer> entry : crafts.entrySet()) {
 			if(entry.getValue() < id)
 				rank++;
 		}
 		return rank;
 	}
 	
-	public int putCraft(Craft c) {
+	public int putCraft(SquadronCraft c) {
 		if(crafts.containsKey(c))
 			return -1;
 		crafts.put(c, nextId);
@@ -145,7 +146,7 @@ public class Squadron {
 	}
 	
 	public void sinkAll() {
-		for(Craft c : crafts.keySet()) {
+		for(SquadronCraft c : crafts.keySet()) {
 			c.sink();
 		}
 		crafts = new ConcurrentHashMap<>();
@@ -168,7 +169,7 @@ public class Squadron {
 		String out = "[Squadron]Pilot:" + pilot.getName();
 		if(carrier != null)
 			out += ",Carrier:" + carrier.getType().getCraftName() + "(" + carrier.getHitBox().size() + ")";
-		for(Map.Entry<Craft, Integer> mapEntry : crafts.entrySet()) {
+		for(Map.Entry<SquadronCraft, Integer> mapEntry : crafts.entrySet()) {
 			out += "," + String.valueOf(mapEntry.getValue()) + ":";
 			out += mapEntry.getKey().getType().getCraftName();
 			out += "(" + mapEntry.getKey().getHitBox().size() + ")";

@@ -12,10 +12,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import me.halfquark.squadronsreloaded.squadron.Squadron;
+import me.halfquark.squadronsreloaded.squadron.SquadronCraft;
 import me.halfquark.squadronsreloaded.squadron.SquadronManager;
-import net.countercraft.movecraft.craft.Craft;
 import net.countercraft.movecraft.localisation.I18nSupport;
-import net.countercraft.movecraft.utils.ChatUtils;
+import net.countercraft.movecraft.util.ChatUtils;
 
 public class InfoSubcommand {
 
@@ -62,15 +62,15 @@ public class InfoSubcommand {
 		sender.sendMessage(">" + I18nSupport.getInternationalisedString("Pilot:" + sq.getPilot().getName()));
 		sender.sendMessage(">" + I18nSupport.getInternationalisedString("Carrier:" + ((sq.getCarrier().getName() != "")?sq.getCarrier().getName():sq.getCarrier().getType().getCraftName())));
 		sender.sendMessage(">" + I18nSupport.getInternationalisedString("Crafts:"));
-		List<Entry<Craft, Integer>> sortedCrafts = new ArrayList<>(sq.getCraftMap().entrySet());
+		List<Entry<SquadronCraft, Integer>> sortedCrafts = new ArrayList<>(sq.getCraftMap().entrySet());
 		Collections.sort(
 				sortedCrafts,
-				new Comparator<Map.Entry<Craft, Integer>>() {
-			        public int compare(Map.Entry<Craft, Integer> a, Map.Entry<Craft, Integer> b) {
+				new Comparator<Map.Entry<SquadronCraft, Integer>>() {
+			        public int compare(Map.Entry<SquadronCraft, Integer> a, Map.Entry<SquadronCraft, Integer> b) {
 			            return Integer.compare(a.getValue(), b.getValue());
 			        }
 			    });
-		for(Entry<Craft, Integer> entry : sortedCrafts)
+		for(Entry<SquadronCraft, Integer> entry : sortedCrafts)
 			sender.sendMessage(" " + entry.getValue() + ":" + ((entry.getKey().getName() != "")?entry.getKey().getName():entry.getKey().getType().getCraftName()) + "(" + entry.getKey().getHitBox().size() + ")");
 
 	}

@@ -1,9 +1,10 @@
 package me.halfquark.squadronsreloaded.sign;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.type.WallSign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -14,10 +15,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import me.halfquark.squadronsreloaded.SquadronsReloaded;
 import me.halfquark.squadronsreloaded.squadron.Squadron;
+import me.halfquark.squadronsreloaded.squadron.SquadronCraft;
 import me.halfquark.squadronsreloaded.squadron.SquadronManager;
 import net.countercraft.movecraft.CruiseDirection;
 import net.countercraft.movecraft.craft.Craft;
-import net.countercraft.movecraft.utils.MathUtils;
+import net.countercraft.movecraft.util.MathUtils;
 
 public class SRCruiseSign implements Listener {
 
@@ -27,7 +29,7 @@ public class SRCruiseSign implements Listener {
             return;
         }
         Block block = event.getClickedBlock();
-        if (block.getType() != Material.SIGN_POST && block.getType() != Material.WALL_SIGN) {
+        if (!Tag.SIGNS.isTagged(block.getType())){
             return;
         }
         Player player = event.getPlayer();
@@ -54,13 +56,13 @@ public class SRCruiseSign implements Listener {
 	    sign.setLine(0, setLine);
 		CruiseDirection cd = null;
 		if(setCruise) {
-			org.bukkit.material.Sign materialSign = (org.bukkit.material.Sign) block.getState().getData();
-            if(block.getType() == Material.SIGN_POST)
+			Sign materialSign = (Sign) block.getState().getBlockData();
+            if(!(materialSign instanceof WallSign))
                 cd = CruiseDirection.NONE;
             else
-                cd = CruiseDirection.fromBlockFace(materialSign.getFacing());
+                cd = CruiseDirection.fromBlockFace(((WallSign)materialSign).getFacing());
 		}
-		for(Craft c : sq.getCrafts()) {
+		for(SquadronCraft c : sq.getCrafts()) {
 			if (!c.getType().getCanCruise())
                 continue;
 			if(setCruise) {

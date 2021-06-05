@@ -12,30 +12,37 @@ import org.bukkit.util.Vector;
 
 import me.halfquark.squadronsreloaded.SquadronsReloaded;
 import me.halfquark.squadronsreloaded.squadron.Squadron;
+import me.halfquark.squadronsreloaded.squadron.SquadronCraft;
 import me.halfquark.squadronsreloaded.squadron.SquadronManager;
 import net.countercraft.movecraft.craft.Craft;
+import net.countercraft.movecraft.craft.PlayerCraft;
 import net.countercraft.movecraft.events.CraftReleaseEvent;
 import net.countercraft.movecraft.events.ManOverboardEvent;
 import net.countercraft.movecraft.localisation.I18nSupport;
-import net.countercraft.movecraft.utils.ChatUtils;
-import net.countercraft.movecraft.utils.MathUtils;
+import net.countercraft.movecraft.util.ChatUtils;
+import net.countercraft.movecraft.util.MathUtils;
 
 public class ReleaseListener implements Listener {
 
 	@EventHandler
 	public void onCraftRelease(CraftReleaseEvent e) {
-		List<Squadron> sqList = SquadronManager.getInstance().getCarrierSquadrons(e.getCraft());
-		if(sqList.size() > 0) {
-			for(Squadron sq : sqList) {
-				sq.releaseAll(e.getReason());
-				SquadronManager.getInstance().removeSquadron(sq);
+		if(e.getCraft() instanceof PlayerCraft) {
+			List<Squadron> sqList = SquadronManager.getInstance().getCarrierSquadrons((PlayerCraft) e.getCraft());
+			if(sqList.size() > 0) {
+				for(Squadron sq : sqList) {
+					sq.releaseAll(e.getReason());
+					SquadronManager.getInstance().removeSquadron(sq);
+				}
+				return;
 			}
-			return;
 		}
-		Player p = e.getCraft().getNotificationPlayer();
+		if(!(e.getCraft() instanceof SquadronCraft))
+			return;
+		SquadronCraft craft = (SquadronCraft) e.getCraft();
+		Player p = craft.getSquadronPilot();
 		if(p == null)
 			return;
-		Squadron sq = SquadronManager.getInstance().getPlayerSquadron(p, true);
+		Squadron sq = craft.getSquadron();
 		if(sq == null)
 			return;
 		if(sq.getCarrier() != null) {
@@ -78,7 +85,7 @@ public class ReleaseListener implements Listener {
         double telX = (craft.getHitBox().getMinX() + craft.getHitBox().getMaxX())/2D + 0.5D;
         double telZ = (craft.getHitBox().getMinZ() + craft.getHitBox().getMaxZ())/2D + 0.5D;
         double telY = craft.getHitBox().getMaxY() + 1;
-        return new Location(craft.getW(), telX, telY, telZ);
+        return new Location(craft.getWorld(), telX, telY, telZ);
     }
 	
 }

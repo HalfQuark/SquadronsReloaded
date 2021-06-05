@@ -1,7 +1,7 @@
 package me.halfquark.squadronsreloaded.sign;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -11,9 +11,9 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import me.halfquark.squadronsreloaded.squadron.Squadron;
+import me.halfquark.squadronsreloaded.squadron.SquadronCraft;
 import me.halfquark.squadronsreloaded.squadron.SquadronManager;
 import net.countercraft.movecraft.CruiseDirection;
-import net.countercraft.movecraft.craft.Craft;
 
 public class SRDescendSign implements Listener {
 
@@ -23,7 +23,7 @@ public class SRDescendSign implements Listener {
             return;
         }
         Block block = event.getClickedBlock();
-        if (block.getType() != Material.SIGN_POST && block.getType() != Material.WALL_SIGN){
+        if (!Tag.SIGNS.isTagged(block.getType())){
             return;
         }
         Player player = event.getPlayer();
@@ -37,7 +37,7 @@ public class SRDescendSign implements Listener {
 		if(sq == null)
 			return;
         
-		for(Craft c : sq.getCrafts()) {
+		for(SquadronCraft c : sq.getCrafts()) {
 			if (c == null || !c.getType().getCanCruise()) {
 	            continue;
 	        }

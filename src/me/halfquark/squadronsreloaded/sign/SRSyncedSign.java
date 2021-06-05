@@ -9,7 +9,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -24,7 +24,7 @@ import me.halfquark.squadronsreloaded.squadron.Squadron;
 import me.halfquark.squadronsreloaded.squadron.SquadronManager;
 import net.countercraft.movecraft.MovecraftLocation;
 import net.countercraft.movecraft.craft.Craft;
-import net.countercraft.movecraft.utils.MathUtils;
+import net.countercraft.movecraft.util.MathUtils;
 
 public class SRSyncedSign implements Listener {
 	
@@ -38,7 +38,7 @@ public class SRSyncedSign implements Listener {
             return;
         }
         Block block = event.getClickedBlock();
-        if (block.getType() != Material.SIGN_POST && block.getType() != Material.WALL_SIGN) {
+        if (!Tag.SIGNS.isTagged(block.getType())){
             return;
         }
         Sign sign = (Sign) event.getClickedBlock().getState();
@@ -76,8 +76,8 @@ public class SRSyncedSign implements Listener {
 			LinkedList<MovecraftLocation> foundLocations = new LinkedList<MovecraftLocation>();
 	        for (MovecraftLocation tloc : c.getHitBox()) {
 	            Block tb = w.getBlockAt(tloc.getX(), tloc.getY(), tloc.getZ());
-	            if (!tb.getType().equals(Material.SIGN_POST) && !tb.getType().equals(Material.WALL_SIGN)) {
-	                continue;
+	            if (!Tag.SIGNS.isTagged(tb.getType())){
+	                return;
 	            }
 	            Sign ts = (Sign) tb.getState();
 

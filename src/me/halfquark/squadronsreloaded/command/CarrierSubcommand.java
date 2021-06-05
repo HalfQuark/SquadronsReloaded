@@ -11,7 +11,7 @@ import me.halfquark.squadronsreloaded.squadron.SquadronManager;
 import net.countercraft.movecraft.craft.Craft;
 import net.countercraft.movecraft.events.ManOverboardEvent;
 import net.countercraft.movecraft.localisation.I18nSupport;
-import net.countercraft.movecraft.utils.ChatUtils;
+import net.countercraft.movecraft.util.ChatUtils;
 
 public class CarrierSubcommand {
 
@@ -32,7 +32,7 @@ public class CarrierSubcommand {
 		}
 		Craft carrier = sq.getCarrier();
 		Location telPoint = getCraftTeleportPoint(carrier);
-        if (carrier.getW() != player.getWorld()) {
+        if (carrier.getWorld() != player.getWorld()) {
             player.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("ManOverboard - Other World"));
             return;
         }
@@ -50,7 +50,7 @@ public class CarrierSubcommand {
         double telX = (craft.getHitBox().getMinX() + craft.getHitBox().getMaxX())/2D + 0.5D;
         double telZ = (craft.getHitBox().getMinZ() + craft.getHitBox().getMaxZ())/2D + 0.5D;
         double telY = craft.getHitBox().getMaxY() + 1;
-        return new Location(craft.getW(), telX, telY, telZ);
+        return new Location(craft.getWorld(), telX, telY, telZ);
     }
 	
 }

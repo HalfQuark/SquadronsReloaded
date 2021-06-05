@@ -6,19 +6,21 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.type.Comparator;
+import org.bukkit.block.data.type.Comparator.Mode;
+import org.bukkit.block.data.type.Repeater;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.material.Comparator;
-import org.bukkit.material.Diode;
-import org.bukkit.material.MaterialData;
 
 import me.halfquark.squadronsreloaded.squadron.Squadron;
+import me.halfquark.squadronsreloaded.squadron.SquadronCraft;
 import me.halfquark.squadronsreloaded.squadron.SquadronManager;
 import net.countercraft.movecraft.MovecraftLocation;
 import net.countercraft.movecraft.craft.Craft;
-import net.countercraft.movecraft.utils.MathUtils;
+import net.countercraft.movecraft.util.MathUtils;
 
 public class RedstoneComponentListener implements Listener {
 	
@@ -26,10 +28,8 @@ public class RedstoneComponentListener implements Listener {
     public void onInteract(PlayerInteractEvent event) {
 		if(event.getAction() != Action.RIGHT_CLICK_BLOCK)
 			return;
-		if(event.getClickedBlock().getType() != Material.DIODE_BLOCK_OFF
-        && event.getClickedBlock().getType() != Material.DIODE_BLOCK_ON
-        && event.getClickedBlock().getType() != Material.REDSTONE_COMPARATOR_ON
-        && event.getClickedBlock().getType() != Material.REDSTONE_COMPARATOR_OFF) {
+		if(event.getClickedBlock().getType() != Material.REPEATER
+        && event.getClickedBlock().getType() != Material.COMPARATOR) {
         	return;
         }
 		Location compLoc = event.getClickedBlock().getLocation();
@@ -57,16 +57,16 @@ public class RedstoneComponentListener implements Listener {
         	return;
         World w = event.getClickedBlock().getWorld();
 		Material compMaterial = event.getClickedBlock().getType();
-		MaterialData compBlockData = getCompBlock(event.getClickedBlock()).getState().getData();
+		BlockData compBlockData = getCompBlock(event.getClickedBlock()).getState().getBlockData();
 		int compState = getCompState(event.getClickedBlock());
-		for(Craft craft : squad.getCrafts()) {
+		for(SquadronCraft craft : squad.getCrafts()) {
 			for (MovecraftLocation tloc : craft.getHitBox()) {
 				Block tb = w.getBlockAt(tloc.getX(), tloc.getY(), tloc.getZ());
 				if(tb.equals(event.getClickedBlock()))
 					continue;
 				if(!tb.getType().equals(compMaterial))
 					continue;
-				if(!getCompBlock(tb).getState().getData().equals(compBlockData))
+				if(!getCompBlock(tb).getState().getBlockData().equals(compBlockData))
 					continue;
 				setCompState(tb, compState + 1);
 			}
@@ -80,12 +80,12 @@ public class RedstoneComponentListener implements Listener {
 	}
 	
 	private int getCompState(Block block) {
-		MaterialData md = block.getState().getData();
-		if(md instanceof Diode) {
-			return ((Diode) md).getDelay();
+		BlockData md = block.getState().getBlockData();
+		if(md instanceof Repeater) {
+			return ((Repeater) md).getDelay();
 		}
 		if(md instanceof Comparator) {
-			if(((Comparator) md).isSubtractionMode())
+			if(((Comparator) md).getMode().equals(Mode.SUBTRACT))
 				return 1;
 			return 0;
 		}
@@ -94,18 +94,18 @@ public class RedstoneComponentListener implements Listener {
 	
 	private void setCompState(Block block, int state) {
 		BlockState bs = block.getState();
-		MaterialData md = block.getState().getData();
-		if(md instanceof Diode) {
-			Diode diode = (Diode) md;
+		BlockData md = block.getState().getBlockData();
+		if(md instanceof Repeater) {
+			Repeater diode = (Repeater) md;
 			diode.setDelay(1 + (state-1)%4);
-			bs.setData(diode);
+			bs.setBlockData(diode);
 			bs.update();
 			return;
 		}
 		if(md instanceof Comparator) {
 			Comparator comparator = (Comparator) md;
-			comparator.setSubtractionMode(state % 2 == 1);
-			bs.setData(comparator);
+			comparator.setMode((state % 2 == 1)?Mode.SUBTRACT:Mode.COMPARE);
+			bs.setBlockData(comparator);
 			bs.update();
 			return;
 		}

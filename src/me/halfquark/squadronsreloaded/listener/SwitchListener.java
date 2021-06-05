@@ -2,22 +2,21 @@ package me.halfquark.squadronsreloaded.listener;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.type.Switch;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockRedstoneEvent;
-import org.bukkit.material.Button;
-import org.bukkit.material.Lever;
-import org.bukkit.material.MaterialData;
-import org.bukkit.material.SimpleAttachableMaterialData;
 
 import me.halfquark.squadronsreloaded.squadron.Squadron;
 import me.halfquark.squadronsreloaded.squadron.SquadronManager;
 import net.countercraft.movecraft.MovecraftLocation;
 import net.countercraft.movecraft.craft.Craft;
-import net.countercraft.movecraft.utils.MathUtils;
+import net.countercraft.movecraft.util.MathUtils;
 
 public class SwitchListener implements Listener {
 
@@ -67,9 +66,8 @@ public class SwitchListener implements Listener {
 	
 	@EventHandler
 	public void onRedstoneEvent(BlockRedstoneEvent event) {
-		if(event.getBlock().getType() != Material.STONE_BUTTON
-        && event.getBlock().getType() != Material.WOOD_BUTTON
-        && event.getBlock().getType() != Material.LEVER) {
+		if(!Tag.BUTTONS.isTagged(event.getBlock().getType())
+        && !(event.getBlock().getType().equals(Material.LEVER))) {
         	return;
         }
 		/*if(event.getOldCurrent() <= event.getNewCurrent() || event.getNewCurrent() != 0)
@@ -99,14 +97,14 @@ public class SwitchListener implements Listener {
         	return;
         World w = event.getBlock().getWorld();
 		Material switchMaterial = event.getBlock().getType();
-		MaterialData switchBlockData = getSwitchBlock(event.getBlock()).getState().getData();
+		BlockData switchBlockData = getSwitchBlock(event.getBlock()).getState().getBlockData();
 		boolean switchState = (event.getNewCurrent() != 0);
 		for(Craft craft : squad.getCrafts()) {
 			for (MovecraftLocation tloc : craft.getHitBox()) {
 				Block tb = w.getBlockAt(tloc.getX(), tloc.getY(), tloc.getZ());
 				if(!tb.getType().equals(switchMaterial))
 					continue;
-				if(!getSwitchBlock(tb).getState().getData().equals(switchBlockData))
+				if(!getSwitchBlock(tb).getState().getBlockData().equals(switchBlockData))
 					continue;
 				setSwitchState(tb, switchState);
 			}
@@ -116,7 +114,7 @@ public class SwitchListener implements Listener {
 	
 	
 	private Block getSwitchBlock(Block block) {
-		return block.getRelative(((SimpleAttachableMaterialData) block.getState().getData()).getAttachedFace());
+		return block.getRelative(((Switch) block.getState().getBlockData()).getFacing().getOppositeFace());
 	}
 	
 	// Use event.getNewPower() instead
@@ -135,22 +133,10 @@ public class SwitchListener implements Listener {
 	
 	private void setSwitchState(Block block, boolean state) {
 		BlockState bs = block.getState();
-		SimpleAttachableMaterialData s = (SimpleAttachableMaterialData) bs.getData();
-		if(s instanceof Button) {
-			Button button = (Button) s;
-			button.setPowered(state);
-			bs.setData(button);
-			bs.update();
-			return;
-		}
-		if(s instanceof Lever) {
-			Lever lever = (Lever) s;
-			lever.setPowered(state);
-			bs.setData(lever);
-			bs.update();
-			return;
-		}
-		return;
+		Switch s = (Switch) bs.getBlockData();
+		s.setPowered(state);
+		bs.setBlockData(s);
+		bs.update();
 	}
 	
 }

@@ -15,7 +15,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import me.halfquark.squadronsreloaded.SquadronsReloaded;
 import me.halfquark.squadronsreloaded.formation.FormationFormer;
 import me.halfquark.squadronsreloaded.move.CraftRotateManager;
-import net.countercraft.movecraft.craft.Craft;
+import net.countercraft.movecraft.craft.PlayerCraft;
 
 public class SquadronManager {
 
@@ -71,7 +71,7 @@ public class SquadronManager {
 		return null;
 	}
 	
-	public List<Squadron> getCarrierSquadrons(Craft c) {
+	public List<Squadron> getCarrierSquadrons(PlayerCraft c) {
 		ArrayList<Squadron> squadList = new ArrayList<>();
 		for(Map.Entry<Player, Squadron> entry : squads.entrySet()) {
 			if(c.equals(entry.getValue().getCarrier()))
@@ -96,12 +96,12 @@ public class SquadronManager {
 			if(sq.getCrafts() == null) {
 				squads.remove(entry.getKey());
 			}
-			for(Craft craft : sq.getCrafts()) {
+			for(SquadronCraft craft : sq.getCrafts()) {
 				CraftRotateManager.getInstance().adjustDirection(sq, craft);
 				if(craft.getCruising())
 					continue;
 				if(sq.isFormingUp())
-					FormationFormer.formUp(craft, sq);
+					FormationFormer.formUp(craft);
 				craft.setLastCruiseUpdate(System.currentTimeMillis());
 			}
 		}
