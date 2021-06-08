@@ -69,7 +69,6 @@ public class SRSyncedSign implements Listener {
 		otherLines.replaceAll(s -> s = ChatColor.stripColor(s).toLowerCase());
 		otherLines.removeIf(s -> s.isEmpty());
 		signCooldown.put(event.getPlayer(), true);
-		Bukkit.broadcastMessage(otherLines.toString());
 		for(Craft c : sq.getCrafts()) {
 			if(c.equals(onCraft))
 				continue;
