@@ -17,6 +17,8 @@ public class TranslationListener implements Listener {
 			CraftRotateManager.getInstance().registerCruise(e.getCraft(), e.getCraft().getCruiseDirection());
 		if(!(e.getCraft() instanceof SquadronCraft))
 			return;
+		if(e.isCancelled())
+			return;
 		SquadronCraft craft = (SquadronCraft) e.getCraft();
 		CraftProximityManager.getInstance().updateCraft(craft, e.getNewHitBox());
 		Squadron sq = craft.getSquadron();

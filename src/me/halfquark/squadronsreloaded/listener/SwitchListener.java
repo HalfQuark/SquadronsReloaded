@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.Switch;
@@ -114,7 +115,20 @@ public class SwitchListener implements Listener {
 	
 	
 	private Block getSwitchBlock(Block block) {
-		return block.getRelative(((Switch) block.getState().getBlockData()).getFacing().getOppositeFace());
+		final Switch button = (Switch) block.getState().getBlockData();
+		BlockFace face = button.getFacing();
+		switch (button.getFace()) {
+	    case FLOOR:
+	        face = BlockFace.UP;
+	        break;
+	    case CEILING:
+	        face = BlockFace.DOWN;
+	        break;
+		default:
+			break;
+	    }
+		Block behind = block.getRelative(face.getOppositeFace());
+		return behind;
 	}
 	
 	// Use event.getNewPower() instead

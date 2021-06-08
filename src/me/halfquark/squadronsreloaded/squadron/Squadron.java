@@ -25,7 +25,10 @@ public class Squadron {
 	private int nextId;
 	private Formation formation;
 	private Integer spacing;
+	private CruiseDirection orientation;
+	private boolean cruising;
 	private CruiseDirection cruiseDirection;
+	private boolean pilotLocked;
 	
 	public Squadron(Player p) {
 		pilot = p;
@@ -33,7 +36,9 @@ public class Squadron {
 		nextId = 0;
 		formation = null;
 		spacing = null;
-		cruiseDirection = null;
+		orientation = null;
+		cruising = false;
+		pilotLocked = false;
 	}
 	
 	public Player getPilot() {return pilot;}
@@ -43,7 +48,9 @@ public class Squadron {
 	public Integer getSpacing() {return spacing;}
 	public boolean isFormingUp() {return formation != null;}
 	@Nullable
-	public CruiseDirection getDirection() {return cruiseDirection;}
+	public CruiseDirection getDirection() {return orientation;}
+	public boolean getCruising() {return cruising;}
+	public CruiseDirection getCruiseDirection() {return cruiseDirection;}
 	
 	public int getSize() {return (crafts == null)?(0):(crafts.size());}
 	public int getDisplacement() {
@@ -162,7 +169,11 @@ public class Squadron {
 		spacing = s;
 	}
 	
-	public void setDirection(CruiseDirection cd) {cruiseDirection = cd;}
+	public void setDirection(CruiseDirection cd) {orientation = cd;}
+	public void setCruising(boolean b) {cruising = b;}
+	public void setCruiseDirection(CruiseDirection cd) {cruiseDirection = cd;}
+	public void setPilotLocked(boolean b) {pilotLocked = b;}
+	public boolean getPilotLocked() {return pilotLocked;}
 	
 	@Override
 	public String toString() {

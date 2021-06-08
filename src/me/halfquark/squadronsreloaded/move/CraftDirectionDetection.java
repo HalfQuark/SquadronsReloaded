@@ -28,7 +28,7 @@ public class CraftDirectionDetection {
 	        String line = sign.getLine(0);
 	        if(!line.equalsIgnoreCase("Cruise: OFF") && !line.equalsIgnoreCase("Cruise: ON"))
 	        	continue;
-            if(!(sign instanceof WallSign))
+            if(!(sign.getBlockData() instanceof WallSign))
                 continue;
             if(cd != null) {
             	if(!cd.equals(CruiseDirection.fromBlockFace(((WallSign) sign.getBlockData()).getFacing()))){

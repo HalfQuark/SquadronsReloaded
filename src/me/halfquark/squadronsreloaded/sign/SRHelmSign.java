@@ -10,10 +10,10 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import me.halfquark.squadronsreloaded.squadron.Squadron;
+import me.halfquark.squadronsreloaded.squadron.SquadronCraft;
 import me.halfquark.squadronsreloaded.squadron.SquadronManager;
 import net.countercraft.movecraft.MovecraftLocation;
 import net.countercraft.movecraft.Rotation;
-import net.countercraft.movecraft.craft.Craft;
 import net.countercraft.movecraft.localisation.I18nSupport;
 import net.countercraft.movecraft.util.MathUtils;
 
@@ -45,7 +45,7 @@ public class SRHelmSign implements Listener {
 			return;
         
 		boolean onBoardCraft = false;
-	    for(Craft craft : sq.getCrafts()) {
+	    for(SquadronCraft craft : sq.getCrafts()) {
 	    	if (MathUtils.locationNearHitBox(craft.getHitBox(),event.getPlayer().getLocation(),2)) {
 	    		onBoardCraft = true;
 		        break;
@@ -54,7 +54,7 @@ public class SRHelmSign implements Listener {
 	    if(!onBoardCraft)
 	    	return;
 		
-	    for(Craft craft : sq.getCrafts()) {
+	    for(SquadronCraft craft : sq.getCrafts()) {
 	        if (!event.getPlayer().hasPermission("movecraft." + craft.getType().getCraftName() + ".rotate")) {
 	            event.getPlayer().sendMessage(I18nSupport.getInternationalisedString("Insufficient Permissions"));
 	            continue;
@@ -65,7 +65,7 @@ public class SRHelmSign implements Listener {
 	        } else {
 	        	mLoc = MathUtils.bukkit2MovecraftLoc(sign.getLocation());
 	        }
-	        craft.rotate(rotation, mLoc);
+	        craft.rotate(rotation, mLoc, true);
 	        /*new BukkitRunnable() {
 				@Override
 				public void run() {

@@ -1,7 +1,5 @@
 package me.halfquark.squadronsreloaded.formation;
 
-import org.bukkit.Location;
-
 import me.halfquark.squadronsreloaded.SquadronsReloaded;
 import me.halfquark.squadronsreloaded.move.CraftProximityManager;
 import me.halfquark.squadronsreloaded.move.CraftTranslateManager;
@@ -24,14 +22,12 @@ public class FormationFormer {
 		x += formation.getXPosition(sq.getCraftRank(craft) - sq.getLeadId(), sq.getSpacing(), cd);
 		y += formation.getYPosition(sq.getCraftRank(craft) - sq.getLeadId(), sq.getSpacing(), cd);
 		z += formation.getZPosition(sq.getCraftRank(craft) - sq.getLeadId(), sq.getSpacing(), cd);
-		Location targetLoc = new Location(craft.getWorld(), x, y, z);
 		MovecraftLocation mLoc = craft.getHitBox().getMidPoint();
-		Location craftLoc = new Location(craft.getWorld(), mLoc.getX(), mLoc.getY(), mLoc.getZ());
-		if(targetLoc.distanceSquared(craftLoc) <= Math.pow(SquadronsReloaded.FORMATIONROUNDDISTANCE, 2))
+		if((x-mLoc.getX())*(x-mLoc.getX()) + (y-mLoc.getY())*(y-mLoc.getY()) + (z-mLoc.getZ())*(z-mLoc.getZ()) <= Math.pow(SquadronsReloaded.FORMATIONROUNDDISTANCE, 2))
 			return;
-		int dx = (int) Math.signum(x - craftLoc.getX());
-		int dy = (int) Math.signum(y - craftLoc.getY());
-		int dz = (int) Math.signum(z - craftLoc.getZ());
+		int dx = (int) Math.signum(x - mLoc.getX());
+		int dy = (int) Math.signum(y - mLoc.getY());
+		int dz = (int) Math.signum(z - mLoc.getZ());
 		CraftProximityManager.Box b = CraftProximityManager.hitBoxToBox(craft.getHitBox());
 		b.translate(dx, 0, 0);
 		if(CraftProximityManager.getInstance().check(craft, b)) {
@@ -48,8 +44,7 @@ public class FormationFormer {
 			b.translate(0, 0, -dz);
 			dz = 0;
 		}
-		Location moveLoc = new Location(craft.getWorld(), mLoc.getX() + dx, mLoc.getY() + dy, mLoc.getZ() + dz);
-		CraftTranslateManager.getInstance().scheduleMove(craft, moveLoc);
+		CraftTranslateManager.getInstance().scheduleMove(craft, mLoc.getX() + dx, mLoc.getY() + dy, mLoc.getZ() + dz);
 	}
 	
 }

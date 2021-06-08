@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
+import me.halfquark.squadronsreloaded.async.SRAsyncManager;
 import me.halfquark.squadronsreloaded.command.SquadronCommand;
 import me.halfquark.squadronsreloaded.formation.FormationManager;
 import me.halfquark.squadronsreloaded.formation.PositionExpression;
@@ -92,6 +93,7 @@ public class SquadronsReloaded extends JavaPlugin {
 		CraftTranslateManager.initialize();
 		CraftRotateManager.initialize();
 		CraftProximityManager.initialize();
+		SRAsyncManager.initialize(this);
 		
 		getServer().getPluginManager().registerEvents(new SRSignLeftClickListener(), this);
 		getServer().getPluginManager().registerEvents(new SRInteractListener(), this);

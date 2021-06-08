@@ -14,6 +14,8 @@ public class RotationListener implements Listener {
 	public void onCraftRotate(CraftRotateEvent e) {
 		if(!(e.getCraft() instanceof SquadronCraft))
 			return;
+		if(e.isCancelled())
+			return;
 		SquadronCraft craft = (SquadronCraft) e.getCraft();
 		if(CraftProximityManager.getInstance().check(craft, e.getNewHitBox())) {
 			e.setCancelled(true);

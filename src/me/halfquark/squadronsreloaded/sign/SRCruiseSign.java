@@ -56,22 +56,20 @@ public class SRCruiseSign implements Listener {
 	    sign.setLine(0, setLine);
 		CruiseDirection cd = null;
 		if(setCruise) {
-			Sign materialSign = (Sign) block.getState().getBlockData();
-            if(!(materialSign instanceof WallSign))
+			if(sign.getBlockData() instanceof WallSign) {
+                cd = CruiseDirection.fromBlockFace(((WallSign) sign.getBlockData()).getFacing());
+            } else {
                 cd = CruiseDirection.NONE;
-            else
-                cd = CruiseDirection.fromBlockFace(((WallSign)materialSign).getFacing());
+            }
 		}
-		for(SquadronCraft c : sq.getCrafts()) {
-			if (!c.getType().getCanCruise())
-                continue;
-			if(setCruise) {
-				c.setCruiseDirection(cd);
+		if(setCruise) {
+			sq.setCruiseDirection(cd);
+			for(SquadronCraft c : sq.getCrafts())
 				c.setLastCruiseUpdate(System.currentTimeMillis());
-			}
-            c.setCruising(setCruise);
-            c.resetSigns(sign);
 		}
+        sq.setCruising(setCruise);
+        for(SquadronCraft c : sq.getCrafts())
+        	c.resetSigns(sign);
 		new BukkitRunnable() {
             @Override
             public void run() {

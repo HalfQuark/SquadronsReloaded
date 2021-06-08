@@ -36,19 +36,20 @@ public class SRDescendSign implements Listener {
         Squadron sq = SquadronManager.getInstance().getPlayerSquadron(player, true);
 		if(sq == null)
 			return;
-        
+		if(setDescend) {
+			sq.setCruiseDirection(CruiseDirection.DOWN);
+		}
+		sq.setCruising(setDescend);
 		for(SquadronCraft c : sq.getCrafts()) {
 			if (c == null || !c.getType().getCanCruise()) {
 	            continue;
 	        }
 			if(setDescend) {
-				c.setCruiseDirection(CruiseDirection.DOWN);
 	            c.setLastCruiseUpdate(System.currentTimeMillis());
 			}
 	        sign.setLine(0, setLine);
 	        sign.update(true);
 
-	        c.setCruising(setDescend);
 	        c.resetSigns(sign);
 		}
 

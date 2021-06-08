@@ -6,7 +6,6 @@ import org.bukkit.entity.Player;
 import me.halfquark.squadronsreloaded.squadron.Squadron;
 import me.halfquark.squadronsreloaded.squadron.SquadronManager;
 import net.countercraft.movecraft.CruiseDirection;
-import net.countercraft.movecraft.craft.Craft;
 import net.countercraft.movecraft.localisation.I18nSupport;
 import net.countercraft.movecraft.util.ChatUtils;
 
@@ -46,74 +45,50 @@ public class CruiseSubcommand {
         }
 	
 	    if(args.length < 2){
-			for(Craft craft : sq.getCrafts()) {
-				if (craft == null)
-		            continue;
-		        if (!player.hasPermission("movecraft.commands") || !player.hasPermission("movecraft.squadron.cruise")) {
-		            craft.setCruising(false);
-		            continue;
-		        }
-		        if(craft.getCruising()){
-		            craft.setCruising(false);
-		            continue;
-		        }
-		        craft.setCruiseDirection(cd);
-		        craft.setCruising(true);
-			}
+	        if (!player.hasPermission("movecraft.commands") || !player.hasPermission("movecraft.squadron.cruise")) {
+	            sq.setCruising(false);
+	            return;
+	        }
+	        if(sq.getCruising()){
+	            sq.setCruising(false);
+	            return;
+	        }
+	        sq.setCruiseDirection(cd);
+	        sq.setCruising(true);
 			return;
 	    }
 	    if (args[1].equalsIgnoreCase("off")) { //This goes before because players can sometimes freeze while cruising
-	        for(Craft craft : sq.getCrafts()) {
-		        if (craft == null)
-		            continue;
-		        craft.setCruising(false);
-	        }
+	        sq.setCruising(false);
 	        return;
 	    }
 	    if (!player.hasPermission("movecraft.squadron.cruise")) {
 	        player.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Insufficient Permissions"));
 	        return;
 	    }
-	
-	    for(Craft craft : sq.getCrafts()) {
-		    if (craft == null)
-		        continue;
-		
-		    if (!player.hasPermission("movecraft." + craft.getType().getCraftName() + ".move")) {
-		        player.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Insufficient Permissions"));
-		        continue;
-		    }
-		    if (!craft.getType().getCanCruise()) {
-		        player.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Cruise - Craft Cannot Cruise"));
-		        continue;
-		    }
-		
-		
-		    if (args[1].equalsIgnoreCase("on")) {
-		        craft.setCruiseDirection(cd);
-		        craft.setCruising(true);
-		        continue;
-		    }
-		    if (args[1].equalsIgnoreCase("north") || args[0].equalsIgnoreCase("n")) {
-		        craft.setCruiseDirection(CruiseDirection.NORTH);
-		        craft.setCruising(true);
-		        continue;
-		    }
-		    if (args[1].equalsIgnoreCase("south") || args[0].equalsIgnoreCase("s")) {
-		        craft.setCruiseDirection(CruiseDirection.SOUTH);
-		        craft.setCruising(true);
-		        continue;
-		    }
-		    if (args[1].equalsIgnoreCase("east") || args[0].equalsIgnoreCase("e")) {
-		        craft.setCruiseDirection(CruiseDirection.EAST);
-		        craft.setCruising(true);
-		        continue;
-		    }
-		    if (args[1].equalsIgnoreCase("west") || args[0].equalsIgnoreCase("w")) {
-		        craft.setCruiseDirection(CruiseDirection.WEST);
-		        craft.setCruising(true);
-		        continue;
-		    }
+	    if (args[1].equalsIgnoreCase("on")) {
+	        sq.setCruiseDirection(cd);
+	        sq.setCruising(true);
+	        return;
+	    }
+	    if (args[1].equalsIgnoreCase("north") || args[0].equalsIgnoreCase("n")) {
+	        sq.setCruiseDirection(CruiseDirection.NORTH);
+	        sq.setCruising(true);
+	        return;
+	    }
+	    if (args[1].equalsIgnoreCase("south") || args[0].equalsIgnoreCase("s")) {
+	        sq.setCruiseDirection(CruiseDirection.SOUTH);
+	        sq.setCruising(true);
+	        return;
+	    }
+	    if (args[1].equalsIgnoreCase("east") || args[0].equalsIgnoreCase("e")) {
+	        sq.setCruiseDirection(CruiseDirection.EAST);
+	        sq.setCruising(true);
+	        return;
+	    }
+	    if (args[1].equalsIgnoreCase("west") || args[0].equalsIgnoreCase("w")) {
+	        sq.setCruiseDirection(CruiseDirection.WEST);
+	        sq.setCruising(true);
+	        return;
 	    }
 	}
 	

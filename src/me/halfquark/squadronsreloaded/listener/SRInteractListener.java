@@ -15,6 +15,7 @@ import org.bukkit.plugin.RegisteredListener;
 
 import me.halfquark.squadronsreloaded.move.CraftTranslateManager;
 import me.halfquark.squadronsreloaded.squadron.Squadron;
+import me.halfquark.squadronsreloaded.squadron.SquadronCraft;
 import me.halfquark.squadronsreloaded.squadron.SquadronManager;
 import net.countercraft.movecraft.config.Settings;
 import net.countercraft.movecraft.craft.Craft;
@@ -79,7 +80,7 @@ public class SRInteractListener implements Listener {
                 timeMap.put(event.getPlayer(), System.currentTimeMillis());
             }
 		    
-		    for(Craft craft : sq.getCrafts()) {
+		    for(SquadronCraft craft : sq.getCrafts()) {
 			    if(CraftTranslateManager.getInstance().isInCooldown(craft))
 			    	continue;
 			
@@ -91,7 +92,7 @@ public class SRInteractListener implements Listener {
 			    int dx = 0;
 			    int dz = 0;
 			    int dy = 0;
-			    if (carrier.getPilotLocked()) {
+			    if (sq.getPilotLocked()) {
 			        // right click moves up or down if using direct
 			        // control
 			        dy = 1;
@@ -131,24 +132,13 @@ public class SRInteractListener implements Listener {
 		    return;
 		}
 		
-		/*if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
-            if (event.getItem() == null || event.getItem().getTypeId() != Settings.PilotTool) {
+		if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
+            if (event.getItem() == null || event.getItem().getType() != Settings.PilotTool) {
                 return;
             }
-            for(Craft craft : sq.getCrafts()) {
-	            if (craft == null) {
-	                return;
-	            }
-	            if (!event.getPlayer().hasPermission("movecraft." + craft.getType().getCraftName() + ".move")
-	                    || !craft.getType().getCanDirectControl()) {
-	                        event.getPlayer().sendMessage(
-	                                I18nSupport.getInternationalisedString("Insufficient Permissions"));
-	                        return;
-	            }
-	            craft.setPilotLocked(!carrier.getPilotLocked());
-            }
+            sq.setPilotLocked(!carrier.getPilotLocked());
             return;
-        }*/
+        }
 		
 	}	
 	

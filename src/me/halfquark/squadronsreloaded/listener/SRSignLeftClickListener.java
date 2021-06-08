@@ -1,8 +1,5 @@
 package me.halfquark.squadronsreloaded.listener;
 
-import java.util.Set;
-
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.BlockState;
@@ -98,18 +95,30 @@ public class SRSignLeftClickListener implements Listener {
         // Attempt to run detection
         Location loc = event.getClickedBlock().getLocation();
         MovecraftLocation startPoint = new MovecraftLocation(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
-        final SquadronCraft c = new SquadronCraft(type, loc.getWorld(), p, squadron);
-        if (c.getType().getCruiseOnPilot())
+        boolean carried = false;
+        for (Craft craft : CraftManager.getInstance().getCraftsInWorld(loc.getWorld())) {
+            if (!craft.getHitBox().contains(startPoint)) {
+                continue;
+            }
+            if(!craft.equals(squadron.getCarrier())) {
+            	p.sendMessage(I18nSupport.getInternationalisedString("Squadrons - Needs to be carried"));
+            	return;
+            }
+            carried = true;
+        }
+        if(!carried) {
+        	p.sendMessage(I18nSupport.getInternationalisedString("Squadrons - Needs to be carried"));
         	return;
-        //c.detect(event.getPlayer(), event.getPlayer(), startPoint);
+        }
+        final SquadronCraft c = new SquadronCraft(type, loc.getWorld(), p, squadron);
+        c.detect(null, event.getPlayer(), startPoint);
         event.setCancelled(true);
 	}
 	
-	/*@EventHandler
+	@EventHandler
 	public void onDetect(CraftDetectEvent event) {
 		if(!(event.getCraft() instanceof SquadronCraft))
 			return;
-		Bukkit.broadcastMessage("Test");
 		SquadronCraft c = (SquadronCraft) event.getCraft();
 		Player player = c.getSquadronPilot();
 		Squadron squadron = c.getSquadron();
@@ -117,38 +126,6 @@ public class SRSignLeftClickListener implements Listener {
     		CraftManager.getInstance().removeCraft(c, Reason.EMPTY);
     		return;
     	}
-    	
-    	Set<Craft> craftsInWorld = CraftManager.getInstance().getCraftsInWorld(c.getWorld());
-
-        boolean isSquadronCraft = false;
-        
-        for (Craft craft : craftsInWorld) {
-            if (craft.getHitBox().intersection(c.getHitBox()).isEmpty()) {
-                continue;
-            }
-            if (craft.equals(c))
-            	continue;
-            if (craft.getType() == c.getType()
-                    || craft.getHitBox().size() <= c.getHitBox().size()) {
-                player.sendMessage(I18nSupport.getInternationalisedString(
-                        "Squadrons - Failed Craft is already being controlled"));
-                CraftManager.getInstance().removeCraft(c, Reason.EMPTY);
-                return;
-            }
-            if(!craft.equals(squadron.getCarrier())) {
-            	player.sendMessage(I18nSupport.getInternationalisedString("Squadrons - Needs to be carried"));
-            	CraftManager.getInstance().removeCraft(c, Reason.EMPTY);
-            	return;
-            }
-            isSquadronCraft = true;
-            craft.setHitBox(craft.getHitBox().difference(c.getHitBox()));
-            craft.setOrigBlockCount(craft.getOrigBlockCount() - c.getHitBox().size());
-        }
-        if(!isSquadronCraft) {
-        	player.sendMessage(I18nSupport.getInternationalisedString("Squadrons - Needs to be carried"));
-        	CraftManager.getInstance().removeCraft(c, Reason.EMPTY);
-        	return;
-        }
         if(squadron.getSize() + 1 > SquadronsReloaded.SQUADMAXSIZE + SquadronsReloaded.SQUADMAXSIZECARRIERMULT * squadron.getCarrier().getOrigBlockCount()) {
         	player.sendMessage(I18nSupport.getInternationalisedString("Squadrons - Too many crafts"));
         	CraftManager.getInstance().removeCraft(c, Reason.EMPTY);
@@ -162,6 +139,7 @@ public class SRSignLeftClickListener implements Listener {
         CruiseDirection cd = CraftDirectionDetection.detect(c);
         if(c.equals(squadron.getLeadCraft())) {
         	squadron.setDirection(cd);
+        	squadron.setPilotLocked(squadron.getCarrier().getPilotLocked());
         }
         if(cd == null) {
         	player.sendMessage(I18nSupport.getInternationalisedString("Squadrons - Contradicting Cruise signs"));
@@ -172,6 +150,6 @@ public class SRSignLeftClickListener implements Listener {
         	CraftRotateManager.getInstance().setDirection(c, cd);
         int position = squadron.putCraft(c);
     	player.sendMessage(I18nSupport.getInternationalisedString(c.getType().getCraftName() + "(" + c.getHitBox().size() + ") added to squadron in position") + " " + position);
-	}*/
+	}
 	
 }

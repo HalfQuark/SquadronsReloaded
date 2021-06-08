@@ -11,6 +11,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import me.halfquark.squadronsreloaded.SquadronsReloaded;
 import me.halfquark.squadronsreloaded.squadron.Squadron;
+import me.halfquark.squadronsreloaded.squadron.SquadronCraft;
 import net.countercraft.movecraft.CruiseDirection;
 import net.countercraft.movecraft.Rotation;
 import net.countercraft.movecraft.craft.Craft;
@@ -48,7 +49,7 @@ public class CraftRotateManager {
 	public CruiseDirection getDirection(Craft craft) {return directionMap.get(craft);}
 	public void setDirection(Craft craft, CruiseDirection cd) {directionMap.put(craft, cd);}
 	
-	public void adjustDirection(Squadron sq, Craft craft) {
+	public void adjustDirection(Squadron sq, SquadronCraft craft) {
 		CruiseDirection cd = CraftRotateManager.getInstance().getDirection(craft);
 		if(turningMap.getOrDefault(craft, false))
 			return;
@@ -60,7 +61,7 @@ public class CraftRotateManager {
 		            @Override
 		            public void run() {
 		            	craft.setLastRotateTime(0L);
-		            	craft.rotate(rotation, craft.getHitBox().getMidPoint());
+		            	craft.rotate(rotation, craft.getHitBox().getMidPoint(), true);
 		            	turningMap.remove(craft);
 		            }
 		        }.runTaskLater(SquadronsReloaded.getInstance(), SquadronsReloaded.TURNTICKS);

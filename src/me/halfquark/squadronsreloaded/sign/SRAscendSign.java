@@ -37,19 +37,17 @@ public class SRAscendSign implements Listener {
         Squadron sq = SquadronManager.getInstance().getPlayerSquadron(player, true);
 		if(sq == null)
 			return;
-        
+		if(setAscend) {
+			sq.setCruiseDirection(CruiseDirection.UP);
+		}
+		sq.setCruising(setAscend);
 		for(SquadronCraft c : sq.getCrafts()) {
-			if (c == null || !c.getType().getCanCruise()) {
-	            continue;
-	        }
 			if(setAscend) {
-				c.setCruiseDirection(CruiseDirection.UP);
 	            c.setLastCruiseUpdate(System.currentTimeMillis());
 			}
 	        sign.setLine(0, setLine);
 	        sign.update(true);
 
-	        c.setCruising(setAscend);
 	        c.resetSigns(sign);
 		}
 

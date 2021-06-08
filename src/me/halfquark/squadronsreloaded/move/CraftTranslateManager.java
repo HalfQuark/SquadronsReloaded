@@ -3,8 +3,6 @@ package me.halfquark.squadronsreloaded.move;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.halfquark.squadronsreloaded.SquadronsReloaded;
@@ -15,7 +13,21 @@ public class CraftTranslateManager {
 	
 	private static CraftTranslateManager inst;
 	private static final Map<Craft, Long> timeMap = new HashMap<>();
-	private static final Map<Craft, Location> pendingMoves = new HashMap<>();
+	private static final Map<Craft, Loc> pendingMoves = new HashMap<>();
+	
+	public class Loc {
+		private int x;
+		private int y;
+		private int z;
+		public Loc(int a, int b, int c) {
+			x = a;
+			y = b;
+			z = c;
+		}
+		public int getX() {return x;}
+		public int getY() {return y;}
+		public int getZ() {return z;}
+	}
 	
 	public static void initialize() {
 		inst = new CraftTranslateManager();
@@ -35,8 +47,7 @@ public class CraftTranslateManager {
 		final CraftType type = craft.getType();
 		int currentGear = craft.getCurrentGear();
 	    Long time = timeMap.get(craft);
-	    World w = craft.getWorld();
-	    int tickCooldown = craft.getType().getTickCooldown(w);
+	    int tickCooldown = craft.getTickCooldown();
 	    if (type.getGearShiftsAffectDirectMovement() && type.getGearShiftsAffectTickCooldown()) {
 	        tickCooldown *= currentGear;
 	    }
@@ -72,7 +83,7 @@ public class CraftTranslateManager {
 	private void performPendingMove(Craft craft) {
 		if(!pendingMoves.containsKey(craft))
 			return;
-		Location loc = pendingMoves.get(craft);
+		Loc loc = pendingMoves.get(craft);
 		int dx = (int) Math.signum(loc.getX() - craft.getHitBox().getMidPoint().getX());
 		int dy = (int) Math.signum(loc.getY() - craft.getHitBox().getMidPoint().getY());
 		int dz = (int) Math.signum(loc.getZ() - craft.getHitBox().getMidPoint().getZ());
@@ -81,10 +92,10 @@ public class CraftTranslateManager {
 		return;
 	}
 	
-	public void scheduleMove(Craft craft, Location loc) {
+	public void scheduleMove(Craft craft, int x, int y, int z) {
 		if(pendingMoves.containsKey(craft))
 			return;
-		pendingMoves.put(craft, loc);
+		pendingMoves.put(craft, new Loc(x, y, z));
 		if(!isInCooldown(craft))
 			performPendingMove(craft);
 		new BukkitRunnable() {
