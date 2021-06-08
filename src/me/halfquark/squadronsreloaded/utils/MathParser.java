@@ -119,10 +119,15 @@ public class MathParser {
 				continue;
 			if(res.isNaN())
 				throw new ArithmeticException("Multiplication/Division operation parsing failed!");
-			scanExp.set(i - 1, res);
-			scanExp.remove(i);
-			scanExp.remove(i);
-			i--;
+			if(i == 0) {
+				scanExp.set(i, res);
+				scanExp.remove(i + 1);
+			} else {
+				scanExp.set(i - 1, res);
+				scanExp.remove(i);
+				scanExp.remove(i);
+				i--;
+			}
 		}
 		if(scanExp.size() != 1)
 			throw new ArithmeticException("Unknown operators! " + scanExp.toString());

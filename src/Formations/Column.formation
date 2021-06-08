@@ -1,0 +1,20 @@
+name: Column
+minSpacing: 3
+maxSpacing: 15
+positionMap:
+  SOUTH:
+    x: 0
+    y: 0
+    z: (-1)^n*(n + (1-(-1)^n)/2)/2*s
+  NORTH:
+    x: 0
+    y: 0
+    z: (-1)^n*(n + (1-(-1)^n)/2)/2*s
+  WEST:
+    x: (-1)^n*(n + (1-(-1)^n)/2)/2*s
+    y: 0
+    z: 0
+  EAST:
+    x: (-1)^n*(n + (1-(-1)^n)/2)/2*s
+    y: 0
+    z: 0

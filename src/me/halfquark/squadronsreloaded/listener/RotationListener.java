@@ -6,6 +6,7 @@ import org.bukkit.event.Listener;
 import me.halfquark.squadronsreloaded.move.CraftProximityManager;
 import me.halfquark.squadronsreloaded.move.CraftRotateManager;
 import me.halfquark.squadronsreloaded.squadron.SquadronCraft;
+import net.countercraft.movecraft.CruiseDirection;
 import net.countercraft.movecraft.events.CraftRotateEvent;
 
 public class RotationListener implements Listener {
@@ -24,10 +25,21 @@ public class RotationListener implements Listener {
 		}
 		CraftProximityManager.getInstance().updateCraft(craft, e.getNewHitBox());
 		CraftRotateManager.getInstance().registerRotation(e.getCraft(), e.getRotation());
-		if(craft.isLead())
-			craft.getSquadron().setDirection(CraftRotateManager.getInstance().getDirection(craft));
+		CruiseDirection cd = CraftRotateManager.getInstance().getDirection(craft);
+		if(craft.isLead()) {
+			craft.getSquadron().setDirection(cd);
+			if(isHorizontal(cd))
+				craft.getSquadron().setCruiseDirection(cd);
+		}
 		//Bad idea, rotation calls this
 		//CraftRotateManager.getInstance().adjustDirection(sq, craft);
+	}
+	
+	private boolean isHorizontal(CruiseDirection cd) {
+		return cd.equals(CruiseDirection.EAST)
+			|| cd.equals(CruiseDirection.WEST)
+			|| cd.equals(CruiseDirection.NORTH)
+			|| cd.equals(CruiseDirection.SOUTH);
 	}
 	
 }

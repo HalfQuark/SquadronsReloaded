@@ -1,19 +1,16 @@
 package me.halfquark.squadronsreloaded;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.halfquark.squadronsreloaded.async.SRAsyncManager;
 import me.halfquark.squadronsreloaded.command.SquadronCommand;
 import me.halfquark.squadronsreloaded.formation.FormationManager;
-import me.halfquark.squadronsreloaded.formation.PositionExpression;
+import me.halfquark.squadronsreloaded.listener.RedstoneComponentListener;
 import me.halfquark.squadronsreloaded.listener.ReleaseListener;
 import me.halfquark.squadronsreloaded.listener.RotationListener;
-import me.halfquark.squadronsreloaded.listener.RedstoneComponentListener;
 import me.halfquark.squadronsreloaded.listener.SRInteractListener;
 import me.halfquark.squadronsreloaded.listener.SRPlayerListener;
 import me.halfquark.squadronsreloaded.listener.SRSignLeftClickListener;
@@ -32,7 +29,6 @@ import me.halfquark.squadronsreloaded.sign.SRLeadSign;
 import me.halfquark.squadronsreloaded.sign.SRReleaseSign;
 import me.halfquark.squadronsreloaded.sign.SRSyncedSign;
 import me.halfquark.squadronsreloaded.squadron.SquadronManager;
-import net.countercraft.movecraft.CruiseDirection;
 
 public class SquadronsReloaded extends JavaPlugin {
 	
@@ -45,6 +41,7 @@ public class SquadronsReloaded extends JavaPlugin {
 	
 	public static List<String> CARRIERTYPES;
 	public static List<String> CARRIEDTYPES;
+	public static boolean NEEDSCARRIER;
 	public static int PILOTCHECKTICKS;
 	public static int MANOVERBOARDTIME;
 	public static int TURNTICKS;
@@ -62,16 +59,10 @@ public class SquadronsReloaded extends JavaPlugin {
 		inst = this;
 		saveDefaultConfig();
 		
-		Map<CruiseDirection, PositionExpression> pMap = new HashMap<>();
-		PositionExpression pe = new PositionExpression("n*s", "n*s", "n*s");
-		pMap.put(CruiseDirection.NORTH, pe);
-		pMap.put(CruiseDirection.EAST, pe);
-		pMap.put(CruiseDirection.SOUTH, pe);
-		pMap.put(CruiseDirection.WEST, pe);
-		
 		FORMATIONFOLDER = new File(SquadronsReloaded.inst.getDataFolder(), File.separator + "Formations");
 		CARRIERTYPES = getConfig().getStringList("carrierTypes");
 		CARRIEDTYPES = getConfig().getStringList("carriedTypes");
+		NEEDSCARRIER = getConfig().getBoolean("needsCarrier");
 		PILOTCHECKTICKS = getConfig().getInt("pilotCheckTicks");
 		MANOVERBOARDTIME = getConfig().getInt("manoverboardTime");
 		TPTONEWLEAD = getConfig().getBoolean("tpToNewLead");
@@ -84,9 +75,7 @@ public class SquadronsReloaded extends JavaPlugin {
 		SYNCEDSIGNS = getConfig().getStringList("syncedSigns");
 		FORMATIONSPEEDMULTIPLIER = getConfig().getDouble("formationSpeedMultiplier");
 		
-		File[] files = SquadronsReloaded.FORMATIONFOLDER.listFiles();
-		if(files == null)
-			loadResources();
+		loadResources();
 		
 		SquadronManager.initialize();
 		FormationManager.initialize();
@@ -122,7 +111,13 @@ public class SquadronsReloaded extends JavaPlugin {
 	public static SquadronsReloaded getInstance() {return inst;}
 	
 	private void loadResources() {
+		File[] files = SquadronsReloaded.FORMATIONFOLDER.listFiles();
+		if(files != null)
+			return;
 		saveResource("Formations" + File.separator + "Echelon.formation", false);
+		saveResource("Formations" + File.separator + "Line.formation", false);
+		saveResource("Formations" + File.separator + "Column.formation", false);
+		saveResource("Formations" + File.separator + "Vic.formation", false);
 	}
 	
 }

@@ -3,6 +3,7 @@ carriedTypes:
 carrierTypes:
   - Airship
   - elevator
+needsCarrier: true
 pilotCheckTicks: 40
 manoverboardTime: 30000
 tpToNewLead: true
@@ -11,7 +12,7 @@ squadMaxSize: 12
 squadMaxSizeCarrierMultiplier: 0.0
 squadMaxDisplacement: 12000
 squadMaxDisplacementCarrierMultiplier: 0.0
-formationRoundDistance: 3.0
+formationRoundDistance: 0.0
 formationSpeedMultiplier: 0.5
 syncedSigns:
   - LaunchTorpedo

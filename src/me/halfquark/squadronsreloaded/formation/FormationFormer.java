@@ -34,15 +34,15 @@ public class FormationFormer {
 			b.translate(-dx, 0, 0);
 			dx = 0;
 		}
-		b.translate(0, dy, 0);
-		if(CraftProximityManager.getInstance().check(craft, b)) {
-			b.translate(0, -dy, 0);
-			dy = 0;
-		}
 		b.translate(0, 0, dz);
 		if(CraftProximityManager.getInstance().check(craft, b)) {
 			b.translate(0, 0, -dz);
 			dz = 0;
+		}
+		b.translate(0, dy, 0);
+		if(CraftProximityManager.getInstance().check(craft, b)) {
+			b.translate(0, -dy, 0);
+			dy = 0;
 		}
 		CraftTranslateManager.getInstance().scheduleMove(craft, mLoc.getX() + dx, mLoc.getY() + dy, mLoc.getZ() + dz);
 	}

@@ -64,7 +64,12 @@ public class SRAsyncManager extends BukkitRunnable {
 	            if(cooldownCache.containsKey(pcraft)){
 	                tickCoolDown = cooldownCache.get(pcraft);
 	            } else {
+	            	// Look, it works I think ~Quark
+	            	pcraft.setProcessing(true);
+	            	pcraft.setCruising(true);
 	                tickCoolDown = pcraft.getTickCooldown();
+	                pcraft.setCruising(false);
+	                pcraft.setProcessing(false);
 	                cooldownCache.put(pcraft,tickCoolDown);
 	            }
 	            // Account for banking and diving in speed calculations by changing the tickCoolDown
@@ -170,10 +175,10 @@ public class SRAsyncManager extends BukkitRunnable {
 			if(sq.getCrafts() == null) {
 				SquadronManager.getInstance().removeSquadron(sq);
 			}
+			if(sq.getCruising())
+				continue;
 			for(SquadronCraft craft : sq.getCrafts()) {
 				CraftRotateManager.getInstance().adjustDirection(sq, craft);
-				if(sq.getCruising())
-					continue;
 				if(sq.isFormingUp())
 					FormationFormer.formUp(craft);
 				craft.setLastCruiseUpdate(System.currentTimeMillis());

@@ -100,13 +100,13 @@ public class SRSignLeftClickListener implements Listener {
             if (!craft.getHitBox().contains(startPoint)) {
                 continue;
             }
-            if(!craft.equals(squadron.getCarrier())) {
+            if(!craft.equals(squadron.getCarrier()) && SquadronsReloaded.NEEDSCARRIER) {
             	p.sendMessage(I18nSupport.getInternationalisedString("Squadrons - Needs to be carried"));
             	return;
             }
             carried = true;
         }
-        if(!carried) {
+        if(!carried && SquadronsReloaded.NEEDSCARRIER) {
         	p.sendMessage(I18nSupport.getInternationalisedString("Squadrons - Needs to be carried"));
         	return;
         }
