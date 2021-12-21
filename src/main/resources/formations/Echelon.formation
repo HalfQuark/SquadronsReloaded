@@ -1,0 +1,20 @@
+name: Echelon
+minSpacing: 3
+maxSpacing: 15
+positionMap:
+  SOUTH:
+    x: n*s
+    y: 0
+    z: n*s
+  NORTH:
+    x: n*s
+    y: 0
+    z: n*s
+  WEST:
+    x: n*s
+    y: 0
+    z: n*s
+  EAST:
+    x: n*s
+    y: 0
+    z: n*s
