@@ -118,8 +118,7 @@ all crafts of the squadron will try to mimic it.
 ## Config:  
  carriedTypes - list all craft types which can be carried aka be piloted as a squadron craft  
  carrierTypes - list all crafts which can be used to launch squadrons  
- needsCarrier - if squadron crafts need to be part of a carrier to be piltoed  
- pilotCheckTicks - specify how many ticks the plugin will wait after a squad craft is piloted to check if it's valid and add it to the squadron (you can leave it at 40)  
+ needsCarrier - if squadron crafts need to be part of a carrier to be piltoed    
  manoverboardTime - specify the manoverboard timer when you fall from a squadron craft  
  tpToNewLead - if true the plugin will try to tp the player to the new squadron lead craft when the current one is sunk if the player is standing on it  
  squadMaxSize - (double) specify the base maximum number of crafts allowed on a squadron  
