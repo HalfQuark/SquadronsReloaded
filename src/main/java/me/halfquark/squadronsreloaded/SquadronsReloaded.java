@@ -42,7 +42,6 @@ public class SquadronsReloaded extends JavaPlugin {
 	public static List<String> CARRIERTYPES;
 	public static List<String> CARRIEDTYPES;
 	public static boolean NEEDSCARRIER;
-	public static int PILOTCHECKTICKS;
 	public static int MANOVERBOARDTIME;
 	public static int TURNTICKS;
 	public static double SQUADMAXSIZE;
@@ -63,7 +62,6 @@ public class SquadronsReloaded extends JavaPlugin {
 		CARRIERTYPES = getConfig().getStringList("carrierTypes");
 		CARRIEDTYPES = getConfig().getStringList("carriedTypes");
 		NEEDSCARRIER = getConfig().getBoolean("needsCarrier");
-		PILOTCHECKTICKS = getConfig().getInt("pilotCheckTicks");
 		MANOVERBOARDTIME = getConfig().getInt("manoverboardTime");
 		TPTONEWLEAD = getConfig().getBoolean("tpToNewLead");
 		TURNTICKS = getConfig().getInt("turnTicks");

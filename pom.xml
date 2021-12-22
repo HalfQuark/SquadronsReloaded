@@ -6,7 +6,7 @@
 
     <groupId>org.example</groupId>
     <artifactId>SquadronsReloaded</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.1</version>
 
     <repositories>
         <!-- This adds the Spigot Maven repository to the build -->

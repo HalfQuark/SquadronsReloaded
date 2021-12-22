@@ -1,11 +1,13 @@
 package me.halfquark.squadronsreloaded.listener;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -30,7 +32,7 @@ import net.countercraft.movecraft.util.MathUtils;
 
 public class SRSignLeftClickListener implements Listener {
 
-	@EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
 	public void onSignClick(PlayerInteractEvent event) {
 		if (event.getAction() != Action.LEFT_CLICK_BLOCK) {
             return;

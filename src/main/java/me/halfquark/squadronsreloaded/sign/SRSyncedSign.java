@@ -29,7 +29,7 @@ import net.countercraft.movecraft.util.MathUtils;
 public class SRSyncedSign implements Listener {
 	
 	private static ConcurrentMap<Player, Boolean> signCooldown = new ConcurrentHashMap<>();
-	
+
 	@EventHandler
     public final void onSignClick(PlayerInteractEvent event) {
 		if(signCooldown.getOrDefault(event.getPlayer(), false))
@@ -76,7 +76,7 @@ public class SRSyncedSign implements Listener {
 	        for (MovecraftLocation tloc : c.getHitBox()) {
 	            Block tb = w.getBlockAt(tloc.getX(), tloc.getY(), tloc.getZ());
 	            if (!Tag.SIGNS.isTagged(tb.getType())){
-	                return;
+	                continue;
 	            }
 	            Sign ts = (Sign) tb.getState();
 

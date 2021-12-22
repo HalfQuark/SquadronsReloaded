@@ -4,7 +4,6 @@ carrierTypes:
   - Airship
   - elevator
 needsCarrier: true
-pilotCheckTicks: 40
 manoverboardTime: 30000
 tpToNewLead: true
 turnTicks: 2
