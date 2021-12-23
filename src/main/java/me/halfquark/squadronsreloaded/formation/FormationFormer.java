@@ -7,6 +7,7 @@ import me.halfquark.squadronsreloaded.squadron.Squadron;
 import me.halfquark.squadronsreloaded.squadron.SquadronCraft;
 import net.countercraft.movecraft.CruiseDirection;
 import net.countercraft.movecraft.MovecraftLocation;
+import org.bukkit.Bukkit;
 
 public class FormationFormer {
 
@@ -19,9 +20,9 @@ public class FormationFormer {
 		Double x = (double) sq.getLeadCraft().getHitBox().getMidPoint().getX();
 		Double y = (double) sq.getLeadCraft().getHitBox().getMidPoint().getY();
 		Double z = (double) sq.getLeadCraft().getHitBox().getMidPoint().getZ();
-		x += formation.getXPosition(sq.getCraftRank(craft) - sq.getLeadId(), sq.getSpacing(), cd);
-		y += formation.getYPosition(sq.getCraftRank(craft) - sq.getLeadId(), sq.getSpacing(), cd);
-		z += formation.getZPosition(sq.getCraftRank(craft) - sq.getLeadId(), sq.getSpacing(), cd);
+		x += formation.getXPosition(sq.getCraftRank(craft), sq.getSpacing(), cd);
+		y += formation.getYPosition(sq.getCraftRank(craft), sq.getSpacing(), cd);
+		z += formation.getZPosition(sq.getCraftRank(craft), sq.getSpacing(), cd);
 		MovecraftLocation mLoc = craft.getHitBox().getMidPoint();
 		if((x-mLoc.getX())*(x-mLoc.getX()) + (y-mLoc.getY())*(y-mLoc.getY()) + (z-mLoc.getZ())*(z-mLoc.getZ()) <= Math.pow(SquadronsReloaded.FORMATIONROUNDDISTANCE, 2))
 			return;

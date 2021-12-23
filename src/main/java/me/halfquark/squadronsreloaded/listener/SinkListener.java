@@ -49,7 +49,7 @@ public class SinkListener implements Listener {
 		sq.removeCraft(e.getCraft());
 		if(sq.getSize() == 0) {
 			SquadronManager.getInstance().removeSquadron(p);
-			p.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Squadrons - Squadron has been released"));
+			p.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Squadrons - Squadron has been sunk"));
 		}
 		if(tpToLead && SquadronsReloaded.TPTONEWLEAD) {
 			new BukkitRunnable() {
