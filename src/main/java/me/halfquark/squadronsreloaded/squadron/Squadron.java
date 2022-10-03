@@ -148,14 +148,14 @@ public class Squadron {
 	
 	public void releaseAll(Reason r) {
 		for(Craft c : crafts.keySet()) {
-			CraftManager.getInstance().removeCraft(c, r);
+			CraftManager.getInstance().release(c, r, true);
 		}
 		crafts = new ConcurrentHashMap<>();
 	}
 	
 	public void sinkAll() {
 		for(SquadronCraft c : crafts.keySet()) {
-			c.sink();
+			CraftManager.getInstance().sink(c);
 		}
 		crafts = new ConcurrentHashMap<>();
 	}
@@ -173,8 +173,7 @@ public class Squadron {
 	public void setDirection(CruiseDirection cd) {orientation = cd;}
 	public void setCruising(boolean b) {cruising = b;}
 	public void setCruiseDirection(CruiseDirection cd) {cruiseDirection = cd;}
-	public void setPilotLocked(boolean b) {pilotLocked = b;}
-	public boolean getPilotLocked() {return pilotLocked;}
+	public boolean getPilotLocked() {return carrier.getPilotLocked();}
 	
 	@Override
 	public String toString() {

@@ -1,5 +1,10 @@
 package me.halfquark.squadronsreloaded.listener;
 
+import net.countercraft.movecraft.Movecraft;
+import net.countercraft.movecraft.craft.PlayerCraftImpl;
+import net.countercraft.movecraft.events.CraftReleaseEvent;
+import net.countercraft.movecraft.processing.functions.Result;
+import net.countercraft.movecraft.util.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -85,14 +90,14 @@ public class SRSignLeftClickListener implements Listener {
             event.getPlayer().sendMessage(I18nSupport.getInternationalisedString("Insufficient Permissions"));
             return;
         }
-        Player p = event.getPlayer();
+        Player player = event.getPlayer();
         Squadron squadron;
-        if(SquadronManager.getInstance().getPlayerSquadron(p, false) == null) {
-        	squadron = new Squadron(p);
+        if(SquadronManager.getInstance().getPlayerSquadron(player, false) == null) {
+        	squadron = new Squadron(player);
         	squadron.setCarrier(pilotedCraft);
-        	SquadronManager.getInstance().putSquadron(p, squadron);
+        	SquadronManager.getInstance().putSquadron(player, squadron);
         } else {
-        	squadron = SquadronManager.getInstance().getPlayerSquadron(p, false);
+        	squadron = SquadronManager.getInstance().getPlayerSquadron(player, false);
         }
         // Attempt to run detection
         Location loc = event.getClickedBlock().getLocation();
@@ -103,20 +108,35 @@ public class SRSignLeftClickListener implements Listener {
                 continue;
             }
             if(!craft.equals(squadron.getCarrier()) && SquadronsReloaded.NEEDSCARRIER) {
-            	p.sendMessage(I18nSupport.getInternationalisedString("Squadrons - Needs to be carried"));
+                player.sendMessage(I18nSupport.getInternationalisedString("Squadrons - Needs to be carried"));
             	return;
             }
             carried = true;
         }
         if(!carried && SquadronsReloaded.NEEDSCARRIER) {
-        	p.sendMessage(I18nSupport.getInternationalisedString("Squadrons - Needs to be carried"));
+            player.sendMessage(I18nSupport.getInternationalisedString("Squadrons - Needs to be carried"));
         	return;
         }
-        final SquadronCraft c = new SquadronCraft(type, loc.getWorld(), p, squadron);
-        c.detect(null, event.getPlayer(), startPoint);
-        event.setCancelled(true);
+
+        CraftManager.getInstance().detect(
+                startPoint,
+                type, (t, w, p, parents) -> {
+                    assert p != null; // Note: This only passes in a non-null player.
+                    assert parents.size() > 0;
+
+                    final SquadronCraft c = new SquadronCraft(type, loc.getWorld(), p, squadron);
+                    event.setCancelled(true);
+                    return new Pair<>(Result.succeed(), c);
+                },
+                player.getWorld(), player,
+                Movecraft.getAdventure().player(player),
+                craft -> () -> {
+                    // Release old craft if it exists
+                }
+        );
 	}
-	
+
+    // TODO: Implement customisable squad max size per craft type and max distance from carrier
 	@EventHandler
 	public void onDetect(CraftDetectEvent event) {
 		if(!(event.getCraft() instanceof SquadronCraft))
@@ -125,27 +145,26 @@ public class SRSignLeftClickListener implements Listener {
 		Player player = c.getSquadronPilot();
 		Squadron squadron = c.getSquadron();
 		if(c.getHitBox().size() == 0) {
-    		CraftManager.getInstance().removeCraft(c, Reason.EMPTY);
+    		CraftManager.getInstance().release(c, Reason.EMPTY, true);
     		return;
     	}
         if(squadron.getSize() + 1 > SquadronsReloaded.SQUADMAXSIZE + SquadronsReloaded.SQUADMAXSIZECARRIERMULT * squadron.getCarrier().getOrigBlockCount()) {
         	player.sendMessage(I18nSupport.getInternationalisedString("Squadrons - Too many crafts"));
-        	CraftManager.getInstance().removeCraft(c, Reason.EMPTY);
+        	CraftManager.getInstance().release(c, Reason.FORCE, true);
         	return;
         }
         if(squadron.getDisplacement() + c.getOrigBlockCount() > SquadronsReloaded.SQUADMAXDISP + SquadronsReloaded.SQUADMAXDISPCARRIERMULT * squadron.getCarrier().getOrigBlockCount()) {
         	player.sendMessage(I18nSupport.getInternationalisedString("Squadrons - Too much displacement"));
-        	CraftManager.getInstance().removeCraft(c, Reason.EMPTY);
+        	CraftManager.getInstance().release(c, Reason.FORCE, true);
         	return;
         }
         CruiseDirection cd = CraftDirectionDetection.detect(c);
         if(c.equals(squadron.getLeadCraft())) {
         	squadron.setDirection(cd);
-        	squadron.setPilotLocked(squadron.getCarrier().getPilotLocked());
         }
         if(cd == null) {
         	player.sendMessage(I18nSupport.getInternationalisedString("Squadrons - Contradicting Cruise signs"));
-        	CraftManager.getInstance().removeCraft(c, Reason.EMPTY);
+        	CraftManager.getInstance().release(c, Reason.FORCE, true);
         	return;
         }
         if(!cd.equals(CruiseDirection.NONE))

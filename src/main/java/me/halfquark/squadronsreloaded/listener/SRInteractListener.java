@@ -53,7 +53,8 @@ public class SRInteractListener implements Listener {
 		}
 		timeMap = new HashMap<>();
 	}
-	
+
+	// TODO: Implement diferent piloting tool for squadrons to fix direct control issues
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerInteractStick(PlayerInteractEvent event) {
 		Squadron sq = SquadronManager.getInstance().getPlayerSquadron(event.getPlayer(), true);
@@ -133,13 +134,9 @@ public class SRInteractListener implements Listener {
 		    return;
 		}
 		
-		if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
-            if (event.getItem() == null || event.getItem().getType() != Settings.PilotTool) {
-                return;
-            }
-            sq.setPilotLocked(!carrier.getPilotLocked());
-            return;
-        }
+		/*if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
+
+        }*/
 		
 	}	
 	

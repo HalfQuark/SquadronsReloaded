@@ -6,7 +6,7 @@
 
     <groupId>org.example</groupId>
     <artifactId>SquadronsReloaded</artifactId>
-    <version>3.0.2</version>
+    <version>3.1.0</version>
 
     <repositories>
         <!-- This adds the Spigot Maven repository to the build -->
@@ -33,6 +33,12 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
+        <repository>
+            <id>project_lib</id>
+            <name>Repository in project's lib dir</name>
+            <layout>default</layout>
+            <url>file:///${project.basedir}/lib</url>
+        </repository>
     </repositories>
     <dependencies>
         <dependency>
@@ -43,8 +49,14 @@
         <dependency>
             <groupId>net.countercraft</groupId>
             <artifactId>movecraft</artifactId>
-            <version>8.0.0-a.5</version>
-            <scope>provided</scope>
+            <scope>system</scope>
+            <version>8.0.0-a7</version>
+            <systemPath>${basedir}\lib\Movecraft-8.0.0-a.7.jar</systemPath>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations-java5</artifactId>
+            <version>23.0.0</version>
         </dependency>
     </dependencies>
 
