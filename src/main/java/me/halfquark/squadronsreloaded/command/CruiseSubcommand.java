@@ -90,6 +90,16 @@ public class CruiseSubcommand {
 	        sq.setCruising(true);
 	        return;
 	    }
+		if (args[1].equalsIgnoreCase("up") || args[0].equalsIgnoreCase("u")) {
+			sq.setCruiseDirection(CruiseDirection.UP);
+			sq.setCruising(true);
+			return;
+		}
+		if (args[1].equalsIgnoreCase("down") || args[0].equalsIgnoreCase("d")) {
+			sq.setCruiseDirection(CruiseDirection.DOWN);
+			sq.setCruising(true);
+			return;
+		}
 	}
 	
 }

@@ -7,6 +7,7 @@ import me.halfquark.squadronsreloaded.squadron.Squadron;
 import me.halfquark.squadronsreloaded.squadron.SquadronCraft;
 import net.countercraft.movecraft.CruiseDirection;
 import net.countercraft.movecraft.MovecraftLocation;
+import net.countercraft.movecraft.util.hitboxes.HitBox;
 import org.bukkit.Bukkit;
 
 public class FormationFormer {
@@ -29,20 +30,14 @@ public class FormationFormer {
 		int dx = (int) Math.signum(x - mLoc.getX());
 		int dy = (int) Math.signum(y - mLoc.getY());
 		int dz = (int) Math.signum(z - mLoc.getZ());
-		CraftProximityManager.Box b = CraftProximityManager.hitBoxToBox(craft.getHitBox());
-		b.translate(dx, 0, 0);
-		if(CraftProximityManager.getInstance().check(craft, b)) {
-			b.translate(-dx, 0, 0);
+		HitBox b = craft.getHitBox();
+		if(CraftProximityManager.getInstance().check(craft, b, dx, 0, 0)) {
 			dx = 0;
 		}
-		b.translate(0, 0, dz);
-		if(CraftProximityManager.getInstance().check(craft, b)) {
-			b.translate(0, 0, -dz);
+		if(CraftProximityManager.getInstance().check(craft, b, 0, 0, dz)) {
 			dz = 0;
 		}
-		b.translate(0, dy, 0);
-		if(CraftProximityManager.getInstance().check(craft, b)) {
-			b.translate(0, -dy, 0);
+		if(CraftProximityManager.getInstance().check(craft, b, 0, dy, 0)) {
 			dy = 0;
 		}
 		CraftTranslateManager.getInstance().scheduleMove(craft, mLoc.getX() + dx, mLoc.getY() + dy, mLoc.getZ() + dz);

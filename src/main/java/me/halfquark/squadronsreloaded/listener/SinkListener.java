@@ -2,6 +2,7 @@ package me.halfquark.squadronsreloaded.listener;
 
 import java.util.List;
 
+import net.countercraft.movecraft.libs.net.kyori.adventure.audience.Audience;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -41,6 +42,9 @@ public class SinkListener implements Listener {
 		SquadronCraft craft = (SquadronCraft) e.getCraft();
 		Player p = craft.getSquadronPilot();
 		Squadron sq = craft.getSquadron();
+
+		craft.setAudience(Audience.empty());
+
 		boolean tpToLead = false;
 		if(sq.getLeadCraft().equals(e.getCraft())) {
 			if(MathUtils.locationNearHitBox(e.getCraft().getHitBox(), p.getLocation(),2))
@@ -50,6 +54,7 @@ public class SinkListener implements Listener {
 		if(sq.getSize() == 0) {
 			SquadronManager.getInstance().removeSquadron(p);
 			p.sendMessage(ChatUtils.MOVECRAFT_COMMAND_PREFIX + I18nSupport.getInternationalisedString("Squadrons - Squadron has been sunk"));
+			return;
 		}
 		if(tpToLead && SquadronsReloaded.TPTONEWLEAD) {
 			new BukkitRunnable() {
@@ -66,7 +71,6 @@ public class SinkListener implements Listener {
 				}		
 			}.runTaskLater(SquadronsReloaded.getInstance(), 1);
 		}
-		return;
 	}
 	
 	private Location getCraftTeleportPoint(Craft craft) {

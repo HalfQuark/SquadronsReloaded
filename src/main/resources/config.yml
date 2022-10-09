@@ -13,5 +13,7 @@ squadMaxDisplacement: 12000
 squadMaxDisplacementCarrierMultiplier: 0.0
 formationRoundDistance: 0.0
 formationSpeedMultiplier: 0.5
+squadronPilotTool: COMPASS
+blockCountOverride: true
 syncedSigns:
   - LaunchTorpedo

@@ -173,7 +173,8 @@ public class Squadron {
 	public void setDirection(CruiseDirection cd) {orientation = cd;}
 	public void setCruising(boolean b) {cruising = b;}
 	public void setCruiseDirection(CruiseDirection cd) {cruiseDirection = cd;}
-	public boolean getPilotLocked() {return carrier.getPilotLocked();}
+	public void setPilotLocked(boolean b) {pilotLocked = b;}
+	public boolean getPilotLocked() {return pilotLocked;}
 	
 	@Override
 	public String toString() {

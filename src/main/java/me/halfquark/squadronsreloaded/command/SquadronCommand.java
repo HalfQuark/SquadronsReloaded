@@ -76,7 +76,7 @@ public class SquadronCommand implements TabExecutor {
 	}
 	
 	private final String[] completions = {"lead", "carrier", "cruise", "release", "scuttle", "formation", "info", "list"};
-	private final String[] cruiseCompletions = {"North", "East", "South", "West", "On", "Off"};
+	private final String[] cruiseCompletions = {"North", "East", "South", "West", "Up", "Down", "On", "Off"};
 	@Override
 	public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
 	    if(!command.getName().equalsIgnoreCase("squadron"))

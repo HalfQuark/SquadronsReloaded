@@ -4,6 +4,7 @@ import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 
+import me.halfquark.squadronsreloaded.SquadronsReloaded;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -54,14 +55,12 @@ public class SRInteractListener implements Listener {
 		timeMap = new HashMap<>();
 	}
 
-	// TODO: Implement diferent piloting tool for squadrons to fix direct control issues
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerInteractStick(PlayerInteractEvent event) {
 		Squadron sq = SquadronManager.getInstance().getPlayerSquadron(event.getPlayer(), true);
 		if(sq == null)
 			return;
-		PlayerCraft carrier = sq.getCarrier();
-		if (event.getItem() == null || event.getItem().getType() != Settings.PilotTool)
+		if (event.getItem() == null || event.getItem().getType() != SquadronsReloaded.SQUADRONPILOTTOOL)
 	        return;
 		
 		if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
@@ -134,9 +133,13 @@ public class SRInteractListener implements Listener {
 		    return;
 		}
 		
-		/*if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
-
-        }*/
+		if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK) {
+			sq.setPilotLocked(!sq.getPilotLocked());
+			if(sq.getPilotLocked())
+				event.getPlayer().sendMessage(I18nSupport.getInternationalisedString("Squadrons - Entering Direct Control Mode"));
+			else
+				event.getPlayer().sendMessage(I18nSupport.getInternationalisedString("Squadrons - Leaving Direct Control Mode"));
+        }
 		
 	}	
 	

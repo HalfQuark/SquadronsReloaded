@@ -3,6 +3,8 @@ package me.halfquark.squadronsreloaded;
 import java.io.File;
 import java.util.List;
 
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.halfquark.squadronsreloaded.async.SRAsyncManager;
@@ -50,7 +52,9 @@ public class SquadronsReloaded extends JavaPlugin {
 	public static double SQUADMAXDISPCARRIERMULT;
 	public static double FORMATIONROUNDDISTANCE;
 	public static double FORMATIONSPEEDMULTIPLIER;
-	
+	public static Material SQUADRONPILOTTOOL;
+	public static boolean BLOCKCOUNTOVERRIDE;
+
 	public static List<String> SYNCEDSIGNS;
 	
 	@Override
@@ -72,7 +76,9 @@ public class SquadronsReloaded extends JavaPlugin {
 		FORMATIONROUNDDISTANCE = getConfig().getDouble("formationRoundDistance");
 		SYNCEDSIGNS = getConfig().getStringList("syncedSigns");
 		FORMATIONSPEEDMULTIPLIER = getConfig().getDouble("formationSpeedMultiplier");
-		
+		SQUADRONPILOTTOOL = Material.getMaterial(getConfig().getString("squadronPilotTool"));
+		BLOCKCOUNTOVERRIDE = getConfig().getBoolean("blockCountOverride");
+
 		loadResources();
 		
 		SquadronManager.initialize();

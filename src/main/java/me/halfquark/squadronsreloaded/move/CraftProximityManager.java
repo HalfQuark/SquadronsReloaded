@@ -1,8 +1,11 @@
 package me.halfquark.squadronsreloaded.move;
 
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+import net.countercraft.movecraft.MovecraftLocation;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import me.halfquark.squadronsreloaded.SquadronsReloaded;
@@ -10,9 +13,11 @@ import me.halfquark.squadronsreloaded.squadron.Squadron;
 import me.halfquark.squadronsreloaded.squadron.SquadronCraft;
 import net.countercraft.movecraft.craft.Craft;
 import net.countercraft.movecraft.util.hitboxes.HitBox;
+import org.jetbrains.annotations.NotNull;
 
 public class CraftProximityManager {
-	
+
+	/*
 	public static class Box {
 		public int minX;
 		public int minY;
@@ -122,6 +127,59 @@ public class CraftProximityManager {
 			b1.minY > b2.maxY || b1.maxY < b2.minY ||
 			b1.minZ > b2.maxZ || b1.maxZ < b2.minZ
 		);
+	}
+	*/
+
+	private static final ConcurrentMap<Craft, HitBox> preHitboxMap = new ConcurrentHashMap<>();
+	private static CraftProximityManager inst;
+
+	public static void initialize() {
+		inst = new CraftProximityManager();
+	}
+
+	public static CraftProximityManager getInstance() {return inst;}
+
+	public void updateCraft(Craft craft, HitBox hb) {
+		if(hb.isEmpty())
+			return;
+		preHitboxMap.put(craft, hb);
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				if(preHitboxMap.get(craft).equals(hb))
+					preHitboxMap.remove(craft);
+			}
+		}.runTaskLater(SquadronsReloaded.getInstance(), 2);
+	}
+
+	public boolean check(SquadronCraft craft, HitBox newHb){
+		return check(craft, newHb, 0, 0, 0);
+	}
+	public boolean check(SquadronCraft craft, HitBox newHb, int dx, int dy, int dz) {
+		Squadron sq = craft.getSquadron();
+		if(sq == null)
+			return false;
+		if(!sq.hasCraft(craft))
+			return false;
+		//craftBox.expand(1);
+		for(Craft c : sq.getCrafts()) {
+			if(c.equals(craft))
+				continue;
+			if(c.getHitBox().isEmpty())
+				continue;
+			if(!newHb.intersection(c.getHitBox()).isEmpty())
+				return true;
+			if(preHitboxMap.containsKey(c)) {
+				if(preHitboxMap.get(c).isEmpty())
+					continue;
+				for (MovecraftLocation ml : newHb) {
+					ml.translate(dx, dy, dz);
+					if (preHitboxMap.get(c).contains(ml))
+						return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 }
